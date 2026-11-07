@@ -1,0 +1,11 @@
+# Editor & sistem operasi
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Log & file sementara
+*.log
+*.tmp
+_preview_tmp.html

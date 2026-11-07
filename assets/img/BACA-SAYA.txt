@@ -1,0 +1,38 @@
+SLOT FOTO - CEK HATESPEECH
+==========================
+
+Taruh foto di folder ini dengan nama file persis seperti di bawah.
+Format yang didukung: .jpg, .jpeg, .png, .webp
+Foto otomatis tampil menggantikan kotak placeholder (cukup refresh halaman).
+
+Nama file        Lokasi di halaman        Saran isi foto                                   Rasio
+---------------  -----------------------  -----------------------------------------------  ------
+hero             Bagian paling atas       Orang membaca komentar media sosial di ponsel    4:3
+tentang          Tentang                  Kolom komentar / percakapan media sosial         4:3
+hate-speech      Mengenal ujaran keb.     Ilustrasi perundungan daring (cyberbullying)     4:3
+hukum            Dasar Hukum              Buku undang-undang atau palu hakim               4:3
+colab            Cara Kerja               Tangkapan layar API model di Google Colab        16:9
+pengembang       Pengembang               Pas foto formal pengembang                       3:4
+logo-kampus      Pengembang               Logo universitas (PNG latar transparan)          1:1
+
+Contoh: hero.jpg, pengembang.png, logo-kampus.png
+
+SUDAH TERPASANG (semua lisensi CC0 1.0 / domain publik, bebas dipakai):
+- hero.jpg        "Free woman using social media" - rawpixel
+                  https://www.rawpixel.com/image/5921379/photo-image-public-domain-student-woman
+- tentang.jpg     "Digital media use" - Rawpixel.com, Wikimedia Commons
+                  https://commons.wikimedia.org/w/index.php?curid=78993089
+- hate-speech.jpg "People Woman" - Siddharth Bhogra, StockSnap
+                  https://stocksnap.io/photo/people-woman-NXWB8SXF45
+- hukum.jpg       "Courtroom One Gavel" - Joe Gratz, Wikimedia Commons
+                  https://commons.wikimedia.org/w/index.php?curid=91844335
+
+MASIH KOSONG (harus dari Anda sendiri): colab, pengembang, logo-kampus
+Jika mengganti foto di atas, perbarui juga baris "Kredit foto" di footer index.php.
+
+Tips:
+- Ukuran lebar sekitar 1200 px sudah cukup (pas foto & logo cukup 600 px).
+- Kompres foto (mis. lewat squoosh.app) agar halaman tetap ringan, idealnya < 300 KB.
+- Gunakan foto milik sendiri atau foto berlisensi bebas (mis. Unsplash, Pexels)
+  dan cantumkan sumbernya di laporan tugas akhir.
+- Rasio tidak harus persis; foto otomatis dipotong (crop) agar pas.
