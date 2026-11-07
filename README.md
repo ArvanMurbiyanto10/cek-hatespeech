@@ -55,6 +55,7 @@ Proyek memakai runtime komunitas [`vercel-php`](https://github.com/vercel-commun
 
 - Model: [nahiar/hatespeech-abusive-xlm-roberta-v1](https://huggingface.co/nahiar/hatespeech-abusive-xlm-roberta-v1) (Apache-2.0)
 - Foto (CC0 / domain publik): rawpixel, Rawpixel.com via Wikimedia Commons, Siddharth Bhogra via StockSnap, Joe Gratz via Wikimedia Commons. Rincian ada di [`assets/img/BACA-SAYA.txt`](assets/img/BACA-SAYA.txt).
+- Logo Telkom University: Hilfans via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Telkom_University_potrait.png), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
 
 ## Catatan
 

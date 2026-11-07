@@ -382,15 +382,11 @@ function e(string $s): string
     return htmlspecialchars($s, ENT_QUOTES, 'UTF-8');
 }
 
-/**
- * Slot foto. Taruh file di assets/img/<nama>.jpg (atau .jpeg/.png/.webp)
- * maka foto otomatis tampil; jika belum ada, tampil kotak placeholder.
- */
 /** Cek apakah file foto untuk slot tertentu sudah ada di assets/img. */
 function adaFoto(string $nama): bool
 {
     foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
-        if (is_file(__DIR__ . "/assets/img/{$nama}.{$ext}")) {
+        if (is_file(AKAR . "/assets/img/{$nama}.{$ext}")) {
             return true;
         }
     }
@@ -405,13 +401,21 @@ function inisial(string $nama): string
     return implode('', $huruf) ?: '?';
 }
 
+/**
+ * Slot foto. Taruh file di assets/img/<nama>.jpg (atau .jpeg/.png/.webp)
+ * maka foto otomatis tampil; jika belum ada, tampil kotak placeholder.
+ * Penanda versi (?v=) memakai sidik isi file, bukan tanggal file, karena di
+ * Vercel semua file punya tanggal yang sama; jadi foto yang diganti tetap
+ * langsung diperbarui di browser.
+ */
 function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', string $kelas = ''): string
 {
     foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
         $path = AKAR . "/assets/img/{$nama}.{$ext}";
         if (is_file($path)) {
+            $versi = substr((string)md5_file($path), 0, 8);
             return '<figure class="foto ' . $kelas . '" style="aspect-ratio:' . $rasio . '">'
-                 . '<img src="/assets/img/' . $nama . '.' . $ext . '?v=' . filemtime($path) . '" alt="' . e($alt) . '" loading="lazy">'
+                 . '<img src="/assets/img/' . $nama . '.' . $ext . '?v=' . $versi . '" alt="' . e($alt) . '" loading="lazy">'
                  . '</figure>';
         }
     }

@@ -33,7 +33,7 @@ SUDAH TERPASANG (semua lisensi CC0 1.0 / domain publik, bebas dipakai):
                   (CC BY-SA mewajibkan atribusi: sudah dicantumkan di footer)
 
 MASIH KOSONG: pengembang (pas foto Anda). Selama kosong, tampil avatar inisial nama.
-Jika mengganti foto di atas, perbarui juga baris "Kredit foto" di footer index.php.
+Jika mengganti foto di atas, perbarui juga baris "Kredit foto" di footer api/index.php.
 
 Tips:
 - Ukuran lebar sekitar 1200 px sudah cukup (pas foto & logo cukup 600 px).
