@@ -1,6 +1,17 @@
 <?php
 declare(strict_types=1);
 
+// Server bawaan PHP (lokal): biarkan file statis seperti assets/img dilayani langsung.
+if (PHP_SAPI === 'cli-server') {
+    $berkas = dirname(__DIR__) . parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
+    if (is_file($berkas) && !str_ends_with($berkas, '.php')) {
+        return false;
+    }
+}
+
+// Folder akar proyek (tempat folder assets/ berada).
+define('AKAR', dirname(__DIR__));
+
 /* =========================================================================
  *  CEK HATESPEECH
  *  Penilaian utama: model AI nahiar/hatespeech-abusive-xlm-roberta-v1
@@ -11,9 +22,10 @@ declare(strict_types=1);
 
 const MAKS_KARAKTER = 2000;
 
-// Ganti dengan link dari Colab (langkah 5), tambahkan /predict di belakangnya.
-// Link berubah setiap kali Colab dijalankan ulang.
-const API_URL = 'https://standings-level-rover-throw.trycloudflare.com/predict';
+// Alamat API model. Di Vercel, isi lewat Environment Variable bernama API_URL
+// (Settings > Environment Variables), lalu Redeploy. Nilai di bawah hanya cadangan
+// untuk dijalankan lokal. Link trycloudflare berubah setiap Colab dijalankan ulang.
+define('API_URL', getenv('API_URL') ?: 'https://standings-level-rover-throw.trycloudflare.com/predict');
 
 // Identitas tugas akhir, tampil di bagian "Pengembang". GANTI sesuai data Anda.
 const PENGEMBANG = [
@@ -396,10 +408,10 @@ function inisial(string $nama): string
 function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', string $kelas = ''): string
 {
     foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
-        $path = __DIR__ . "/assets/img/{$nama}.{$ext}";
+        $path = AKAR . "/assets/img/{$nama}.{$ext}";
         if (is_file($path)) {
             return '<figure class="foto ' . $kelas . '" style="aspect-ratio:' . $rasio . '">'
-                 . '<img src="assets/img/' . $nama . '.' . $ext . '?v=' . filemtime($path) . '" alt="' . e($alt) . '" loading="lazy">'
+                 . '<img src="/assets/img/' . $nama . '.' . $ext . '?v=' . filemtime($path) . '" alt="' . e($alt) . '" loading="lazy">'
                  . '</figure>';
         }
     }
