@@ -27,7 +27,12 @@ SUDAH TERPASANG (semua lisensi CC0 1.0 / domain publik, bebas dipakai):
 - hukum.jpg       "Courtroom One Gavel" - Joe Gratz, Wikimedia Commons
                   https://commons.wikimedia.org/w/index.php?curid=91844335
 
-MASIH KOSONG (harus dari Anda sendiri): colab, pengembang, logo-kampus
+- colab.png       Tangkapan layar halaman /docs RuangAman API (FastAPI) milik sendiri
+- logo-kampus.png "Logo Telkom University potrait" - Hilfans, Wikimedia Commons, CC BY-SA 4.0
+                  https://commons.wikimedia.org/wiki/File:Logo_Telkom_University_potrait.png
+                  (CC BY-SA mewajibkan atribusi: sudah dicantumkan di footer)
+
+MASIH KOSONG: pengembang (pas foto Anda). Selama kosong, tampil avatar inisial nama.
 Jika mengganti foto di atas, perbarui juga baris "Kredit foto" di footer index.php.
 
 Tips:

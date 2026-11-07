@@ -18,11 +18,11 @@ const API_URL = 'https://standings-level-rover-throw.trycloudflare.com/predict';
 // Identitas tugas akhir, tampil di bagian "Pengembang". GANTI sesuai data Anda.
 const PENGEMBANG = [
     'judul'      => 'Rancang Bangun Aplikasi Web Deteksi Ujaran Kebencian Berbahasa Indonesia Menggunakan Model XLM-RoBERTa',
-    'nama'       => '[Nama Lengkap]',
-    'nim'        => '[NIM]',
-    'prodi'      => '[Program Studi]',
-    'kampus'     => '[Nama Universitas]',
-    'pembimbing' => '[Nama Dosen Pembimbing]',
+    'nama'       => 'Arvan Murbiyanto',
+    'nim'        => '2311102074',
+    'prodi'      => 'Teknik Informatika',
+    'kampus'     => 'Telkom University Purwokerto',
+    'pembimbing' => '', // isi nama dosen pembimbing; jika kosong, baris ini disembunyikan
     'tahun'      => '2026',
 ];
 
@@ -374,6 +374,25 @@ function e(string $s): string
  * Slot foto. Taruh file di assets/img/<nama>.jpg (atau .jpeg/.png/.webp)
  * maka foto otomatis tampil; jika belum ada, tampil kotak placeholder.
  */
+/** Cek apakah file foto untuk slot tertentu sudah ada di assets/img. */
+function adaFoto(string $nama): bool
+{
+    foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
+        if (is_file(__DIR__ . "/assets/img/{$nama}.{$ext}")) {
+            return true;
+        }
+    }
+    return false;
+}
+
+/** Inisial nama, mis. "Arvan Murbiyanto" -> "AM". */
+function inisial(string $nama): string
+{
+    $kata = preg_split('/\s+/', trim(preg_replace('/[^\p{L}\s]/u', '', $nama))) ?: [];
+    $huruf = array_map(fn($k) => mb_strtoupper(mb_substr($k, 0, 1)), array_slice(array_filter($kata), 0, 2));
+    return implode('', $huruf) ?: '?';
+}
+
 function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', string $kelas = ''): string
 {
     foreach (['jpg', 'jpeg', 'png', 'webp'] as $ext) {
@@ -485,6 +504,12 @@ function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', s
         .foto-logo figcaption strong { font-size: 11px; font-weight: 500; }
         .foto-logo figcaption span { display: none; }
         .foto-profil { max-width: 240px; }
+        .foto-inisial { display: grid; place-items: center; background: var(--accent); color: #fff; font-family: var(--serif); font-size: 72px; font-weight: 700; letter-spacing: .02em; }
+        .foto-logo:not(.foto-kosong) { background: #fff; }
+        .foto-logo img { object-fit: contain; padding: 6px; }
+        .foto-layar { border: 1px solid var(--line); background: #fff; }
+        .foto-layar img { object-fit: contain; }
+        .keterangan code { font-size: 12.5px; background: #fff; border: 1px solid var(--line); border-radius: 4px; padding: 1px 5px; }
 
         /* ---------- Bagian ---------- */
         .sec { padding: 80px 0; }
@@ -1051,7 +1076,8 @@ function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', s
             <div class="alur-node"><strong>Model XLM-RoBERTa</strong><small>Klasifikasi multilabel: HATESPEECH &amp; ABUSIVE</small></div>
         </div>
         <div style="margin-top:20px;max-width:720px">
-            <?= foto('colab', 'Tangkapan layar API model yang berjalan di Google Colab', 'Tangkapan layar API model di Google Colab', '16/9') ?>
+            <?= foto('colab', 'Dokumentasi RuangAman API (FastAPI) dengan endpoint GET / dan POST /predict', 'Tangkapan layar API model di Google Colab', '16/9', 'foto-layar') ?>
+            <p class="keterangan">Tangkapan layar dokumentasi API model (FastAPI) yang berjalan di Google Colab, dengan endpoint <code>POST /predict</code> yang dipanggil oleh aplikasi web.</p>
         </div>
 
         <h3 class="sub">Cara membaca hasil</h3>
@@ -1280,14 +1306,20 @@ function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', s
             <p>Aplikasi ini dikembangkan sebagai tugas akhir.</p>
         </div>
         <div class="profil">
-            <?= foto('pengembang', 'Foto ' . PENGEMBANG['nama'], 'Pas foto pengembang', '3/4', 'foto-profil') ?>
+            <?php if (adaFoto('pengembang')): ?>
+                <?= foto('pengembang', 'Foto ' . PENGEMBANG['nama'], 'Pas foto pengembang', '3/4', 'foto-profil') ?>
+            <?php else: ?>
+                <div class="foto foto-profil foto-inisial" style="aspect-ratio:3/4" role="img" aria-label="<?= e(PENGEMBANG['nama']) ?>"><?= e(inisial(PENGEMBANG['nama'])) ?></div>
+            <?php endif; ?>
             <div>
                 <p class="judul-ta"><?= e(PENGEMBANG['judul']) ?></p>
                 <table class="spek">
                     <tr><th>Nama</th><td><?= e(PENGEMBANG['nama']) ?></td></tr>
                     <tr><th>NIM</th><td><?= e(PENGEMBANG['nim']) ?></td></tr>
                     <tr><th>Program Studi</th><td><?= e(PENGEMBANG['prodi']) ?></td></tr>
-                    <tr><th>Dosen Pembimbing</th><td><?= e(PENGEMBANG['pembimbing']) ?></td></tr>
+                    <?php if (PENGEMBANG['pembimbing'] !== ''): ?>
+                        <tr><th>Dosen Pembimbing</th><td><?= e(PENGEMBANG['pembimbing']) ?></td></tr>
+                    <?php endif; ?>
                     <tr><th>Tahun</th><td><?= e(PENGEMBANG['tahun']) ?></td></tr>
                 </table>
                 <div class="kampus">
@@ -1330,6 +1362,9 @@ function foto(string $nama, string $alt, string $saran, string $rasio = '4/3', s
             <a href="https://commons.wikimedia.org/w/index.php?curid=78993089" target="_blank" rel="noopener">Rawpixel.com via Wikimedia Commons</a>,
             <a href="https://stocksnap.io/photo/people-woman-NXWB8SXF45" target="_blank" rel="noopener">Siddharth Bhogra via StockSnap</a>,
             <a href="https://commons.wikimedia.org/w/index.php?curid=91844335" target="_blank" rel="noopener">Joe Gratz via Wikimedia Commons</a>.
+            Logo Telkom University oleh Hilfans,
+            <a href="https://commons.wikimedia.org/wiki/File:Logo_Telkom_University_potrait.png" target="_blank" rel="noopener">Wikimedia Commons</a>,
+            <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>.
         </p>
     </div>
 </footer>
