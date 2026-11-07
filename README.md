@@ -17,7 +17,7 @@ Proyek ini dibuat sebagai tugas akhir.
 Browser ──▶ index.php (PHP) ──JSON──▶ API FastAPI (Google Colab + Cloudflare Tunnel) ──▶ XLM-RoBERTa
 ```
 
-- **index.php**: tampilan, validasi input, pemanggilan API model, dan kamus kata bantu.
+- **api/index.php**: tampilan, validasi input, pemanggilan API model, dan kamus kata bantu.
 - **API model**: FastAPI yang berjalan di Google Colab. Kode API tidak termasuk di repository ini.
 
 ## Menjalankan secara lokal
@@ -25,25 +25,30 @@ Browser ──▶ index.php (PHP) ──JSON──▶ API FastAPI (Google Colab 
 Kebutuhan: PHP 8.0 atau lebih baru dengan ekstensi `curl` dan `mbstring`.
 
 1. Jalankan notebook API model di Google Colab, lalu salin URL Cloudflare Tunnel yang muncul.
-2. Buka `index.php`, lalu ganti nilai `API_URL` dengan URL tersebut ditambah `/predict`:
-   ```php
-   const API_URL = 'https://xxxx.trycloudflare.com/predict';
-   ```
-   URL ini berubah setiap kali Colab dijalankan ulang.
-3. Jalankan server:
+2. Atur alamat API lewat environment variable `API_URL` (URL tadi ditambah `/predict`), atau ubah nilai cadangannya di `api/index.php`.
+3. Jalankan server dari folder akar proyek:
    ```bash
-   php -S localhost:8000
+   API_URL=https://xxxx.trycloudflare.com/predict php -S localhost:8000 -t . api/index.php
    ```
 4. Buka http://localhost:8000.
 
-Data identitas di bagian "Pengembang" diatur lewat konstanta `PENGEMBANG` di bagian atas `index.php`.
+Data identitas di bagian "Pengembang" diatur lewat konstanta `PENGEMBANG` di bagian atas `api/index.php`.
+
+## Deploy ke Vercel
+
+Proyek memakai runtime komunitas [`vercel-php`](https://github.com/vercel-community/php) yang diatur di `vercel.json`.
+
+1. Import repository ini di Vercel (Add New > Project). Framework Preset: **Other**.
+2. Tambahkan Environment Variable `API_URL` berisi URL API model ditambah `/predict`.
+3. Deploy. Setiap kali `API_URL` diganti, lakukan **Redeploy** agar nilainya terpakai.
 
 ## Struktur
 
 ```
 .
-├── index.php          # Seluruh aplikasi (logika, tampilan, skrip)
-└── assets/img/        # Foto halaman (lihat BACA-SAYA.txt)
+├── api/index.php      # Seluruh aplikasi (logika, tampilan, skrip)
+├── assets/img/        # Foto halaman (lihat BACA-SAYA.txt)
+└── vercel.json        # Konfigurasi runtime PHP di Vercel
 ```
 
 ## Kredit
