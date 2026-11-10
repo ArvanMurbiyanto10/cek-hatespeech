@@ -58,9 +58,11 @@ function kepala(array $o): void
 <link rel="stylesheet" href="/assets/ui/base.css">
 <style>
 /* nama penutup selebar wadah; teks pendamping cukup kontras (7:1) di dasar terang */
-footer.closing .close__word { font-size: min(10.6vw, 150px); line-height: 1.1; padding-block: .04em; white-space: nowrap; overflow: visible; }
+footer.closing .close__word { font-size: min(12.6vw, 186px); line-height: 1.1; padding-block: .04em; white-space: nowrap; overflow: visible; }
 footer.closing > .wrap > * { min-width: 0; }
 html .hero .hero__c .hero__lead { color: #4a4a4a !important; }
+/* halaman dokumen (dasar hukum, tentang): tinggi mengikuti isi, tidak dikunci satu layar */
+main > section.doc-sec { height: auto; min-height: 0; }
 html main section:not(.ground-inverse) :is(p.muted, .t-lead) { color: #4a4a4a; }
 </style>
 <?php if (!empty($o['diagram'])): ?>

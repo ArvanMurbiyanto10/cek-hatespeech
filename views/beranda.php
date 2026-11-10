@@ -7,8 +7,7 @@
  *       rhythm dark-band (#hasil) · buttons arrow · mark dots · lit ground sand ·
  *       effect grain-gradient (bingkai hero) · card grounds: tidak ada yang cocok (slot dilepas) ·
  *       grounds: #cara-kerja bg-mist, #faq bg-band
- * moments: pinned-chapters (#cara-kerja: tiga langkah teks -> putusan, gambar berganti per langkah),
- *          liquid-type (#pernyataan: ancaman pidana Pasal 28 ayat (2) sebagai satu kalimat besar)
+ * moments: liquid-type (#pernyataan: ancaman pidana Pasal 28 ayat (2) sebagai satu kalimat besar)
  * screens @1440: hero 1 · cek 1 · cara-kerja 2 · hasil 2 · pernyataan 1 · hukum 1 · model 1 · faq 1 · closing 1
  */
 
@@ -114,12 +113,28 @@ $css = <<<'CSS'
 .pcw__rows { display: grid; padding: 0 22px 20px; }
 .pcw__rows div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid rgb(0 0 0 / .07); font-size: 14px; }
 .pcw__rows b { font-weight: 500; font-variant-numeric: tabular-nums; }
-.mo-pc__visual img { object-fit: cover; object-position: top left; }
 @media (max-width: 359px) { .nav__bar { gap: 8px; } .nav__logo { font-size: 15px; } }
-@media (min-width: 1024px) { #cara-kerja .mo-pc__grid { align-content: start; padding-top: calc(var(--nav, 72px) + var(--s-8)); } }
 
 /* ---------- #hasil: putusan kecil di panel kartu (gelap) ---------- */
 #hasil .panel { --p-h: 300px; }
+#hasil .ui-panel.vd { --u-bg: #fff; background: #fff; color: #1e1f21; border-radius: 14px; min-height: 0; box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 24px 48px -24px rgb(0 0 0 / .5); }
+#hasil .vd__head span, #hasil .vd__row span { color: #4a4f55; }
+/* #cara-kerja: kartu langkah */
+#cara-kerja .langkah .card { display: flex; flex-direction: column; }
+#cara-kerja .langkah .card > .panel { margin-top: auto; }
+#cara-kerja .langkah .card > p { margin-bottom: 28px; }
+#cara-kerja .langkah .panel { --p-h: 280px; padding: 18px; background: #e9eee9; overflow: hidden; }
+#cara-kerja .langkah .panel--flush { padding: 0; }
+.langkah .pcw { box-shadow: 0 0 0 1px rgb(0 0 0 / .08); }
+.langkah .pcw__code { padding: 14px 16px; font-size: 13px; line-height: 1.6; }
+.langkah .pcw__rows { padding: 0 16px 12px; } .langkah .pcw__rows div { padding: 8px 0; font-size: 13px; }
+.langkah__img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
+/* #pernyataan: kalimat besar di tengah */
+section#pernyataan { display: grid; align-content: center; }
+#pernyataan > .wrap { width: 100%; }
+#pernyataan .section-head { max-width: none; margin-inline: auto; text-align: center; display: grid; justify-items: center; gap: var(--s-5); }
+#pernyataan .mo-lt__type { font-size: clamp(56px, 10.5vw, 168px); line-height: .92; max-width: 12ch; }
+#pernyataan .t-lead { margin-inline: auto; }
 .vd { width: 100%; min-height: 330px; padding: 16px 18px; font: 400 13px/1.45 var(--font-text); color: #1e1f21; }
 .vd__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #6e7378; }
 .vd__teks { margin: 0 0 12px; font-size: 14px; color: #232323; }
@@ -129,7 +144,7 @@ $css = <<<'CSS'
 .vd__row i::after { content: ""; display: block; height: 100%; width: var(--v); border-radius: inherit; background: #232323; }
 .vd__row--on i::after { background: #1f9d5c; }
 .vd__ref { margin-top: 14px; padding-top: 10px; border-top: 1px solid rgb(0 0 0 / .07); font-size: 13px; color: #33363a; }
-@media (max-width: 639px) { #hasil .panel { --p-h: 168px; } }
+@media (max-width: 639px) { #hasil .panel { --p-h: 250px; } #cara-kerja .langkah .panel { --p-h: 240px; } }
 
 /* ---------- #model: diagram alur ---------- */
 #model .dg-frame { margin-top: var(--s-7); height: min(520px, calc(100svh - 380px)); min-height: 380px; border-radius: var(--r-lg); background: var(--g-alt); overflow: hidden; }
@@ -155,7 +170,7 @@ JS;
 kepala([
     'judul'     => 'Cek Hatespeech: cek ujaran kebencian untuk teks berbahasa Indonesia',
     'deskripsi' => 'Tempel komentar atau postingan, lalu model XLM-RoBERTa menilai skor ujaran kebencian dan bahasa kasar dalam hitungan detik.',
-    'momen'     => ['pinned-chapters', 'liquid-type'],
+    'momen'     => ['liquid-type'],
     'diagram'   => true,
     'css'       => $css,
     'kanonik'   => '/',
@@ -203,9 +218,9 @@ navigasi();
     <div class="wrap">
       <div class="grid">
         <h2 id="cek-h" class="span-5">Cek ujaran kebencian di teks Anda</h2>
-        <p class="span-6 start-7 muted">Tulis atau tempel teks di kiri, tekan Cek teks, lalu baca di kanan: status, dua skor dari model dan kata yang disorot kamus bantu. <a class="link" href="#hasil">Lihat arti tiap status</a></p>
+        <p class="span-6 start-7 muted">Tulis atau tempel teks, tekan Cek teks, lalu baca putusannya: status, dua skor dari model dan kata yang disorot kamus bantu. <a class="link" href="#hasil">Lihat arti tiap status</a></p>
       </div>
-      <div class="ui ui-app app fill">
+      <div class="ui ui-app app">
         <div class="app__pane app__pane--list">
           <div class="cek-bar"><span class="hw__dots"><i></i><i></i><i></i></span><b>Teks</b><span class="hw__sp"></span><span>Maks. 2.000 karakter</span></div>
           <form class="cek-form" id="form-cek" method="post" action="/#cek" autocomplete="off">
@@ -268,36 +283,33 @@ navigasi();
     </div>
   </section>
 
-  <!-- CARA KERJA (pinned-chapters): tiga langkah, satu bingkai yang berganti gambar -->
-  <section class="section bg-mist" id="cara-kerja" style="--h: 2" data-moment="pinned-chapters" aria-labelledby="cara-h">
-    <div class="wrap mo-pc__grid">
-      <div class="mo-pc__text">
+  <!-- CARA KERJA: tiga kartu langkah, masing-masing dengan jendela atau tangkapan layar aslinya -->
+  <section class="section bg-mist" id="cara-kerja" aria-labelledby="cara-h">
+    <div class="wrap">
+      <div class="section-head">
         <h2 id="cara-h">3 langkah deteksi, dari teks ke putusan</h2>
-        <ol class="mo-pc__steps">
-          <li class="mo-pc__step">
-            <h3>Mengirim teks ke API model</h3>
-            <p>Server PHP di Vercel memeriksa panjang teks, lalu mengirimnya sebagai JSON ke RuangAman API.</p>
-            <figure class="mo-pc__visual">
-              <div class="pcw" role="img" aria-label="Permintaan POST ke RuangAman API berisi teks yang dicek">
+      </div>
+      <div class="grid langkah">
+        <article class="card m-nolift span-4">
+          <h3>1. Mengirim teks ke API model</h3>
+          <p>Server PHP di Vercel memeriksa panjang teks, lalu mengirimnya sebagai JSON ke RuangAman API.</p>
+          <div class="panel"><div class="pcw" role="img" aria-label="Permintaan POST ke RuangAman API berisi teks yang dicek">
                 <div class="hw__bar"><span class="hw__dots"><i></i><i></i><i></i></span><span><b>POST /predict</b></span><span class="hw__sp"></span><span>RuangAman API</span></div>
                 <pre class="pcw__code">{
-  <span class="k">"teks"</span>: <span class="s">"Semua pendatang dari suku itu
-           pencuri, jangan kasih tempat"</span>
+  <span class="k">"teks"</span>: <span class="s">"Semua pendatang dari suku itu pencuri, jangan kasih tempat"</span>
 }</pre>
                 <div class="pcw__rows"><div><span>Panjang teks</span><b>58 karakter</b></div><div><span>Batas</span><b>2.000 karakter</b></div><div><span>Batas tunggu</span><b>25 detik</b></div></div>
-              </div>
-            </figure>
-          </li>
-          <li class="mo-pc__step">
-            <h3>Menilai 2 label dengan XLM-RoBERTa</h3>
-            <p>Model membaca seluruh kalimat dan memberi skor 0 sampai 1 untuk HATESPEECH dan ABUSIVE, masing-masing terpisah.</p>
-            <figure class="mo-pc__visual"><img src="<?= e(urlFoto('colab')) ?>" alt="Dokumentasi RuangAman API dengan endpoint GET / dan POST /predict" width="1280" height="720" loading="lazy" data-source="client" data-subject="dokumentasi API model"></figure>
-          </li>
-          <li class="mo-pc__step">
-            <h3>Menentukan status dari ambang skor 0,8 dan 0,5</h3>
-            <p>Skor 0,8 ke atas menjadi indikasi kuat, 0,5 sampai 0,8 perlu ditinjau, lalu kamus menyorot kata pemicunya.</p>
-            <figure class="mo-pc__visual">
-              <div class="pcw" role="img" aria-label="Jawaban API: skor HATESPEECH 0,9933, ABUSIVE 0,0027, status INDIKASI_KUAT">
+              </div></div>
+        </article>
+        <article class="card m-nolift span-4">
+          <h3>2. Menilai 2 label dengan XLM-RoBERTa</h3>
+          <p>Model membaca seluruh kalimat dan memberi skor 0 sampai 1 untuk HATESPEECH dan ABUSIVE, masing-masing terpisah.</p>
+          <div class="panel panel--flush"><img class="langkah__img" src="<?= e(urlFoto('colab')) ?>" alt="Dokumentasi RuangAman API dengan endpoint GET / dan POST /predict" width="1280" height="720" loading="lazy" data-source="client" data-subject="dokumentasi API model"></div>
+        </article>
+        <article class="card m-nolift span-4">
+          <h3>3. Menentukan status dari ambang skor</h3>
+          <p>Skor 0,8 ke atas menjadi indikasi kuat, 0,5 sampai 0,8 perlu ditinjau, lalu kamus menyorot kata pemicunya.</p>
+          <div class="panel"><div class="pcw" role="img" aria-label="Jawaban API: skor HATESPEECH 0,9933, ABUSIVE 0,0027, status INDIKASI_KUAT">
                 <div class="hw__bar"><span class="hw__dots"><i></i><i></i><i></i></span><span><b>200 OK</b> · 0,9933</span><span class="hw__sp"></span><span>JSON</span></div>
                 <pre class="pcw__code">{
   <span class="k">"skor"</span>: {
@@ -307,12 +319,9 @@ navigasi();
   <span class="k">"status"</span>: <span class="s">"INDIKASI_KUAT"</span>,
   <span class="k">"prioritas"</span>: <span class="s">"Tinggi"</span>
 }</pre>
-              </div>
-            </figure>
-          </li>
-        </ol>
+              </div></div>
+        </article>
       </div>
-      <div class="mo-pc__visuals frame"></div>
     </div>
   </section>
 
