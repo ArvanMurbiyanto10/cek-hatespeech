@@ -93,7 +93,7 @@ html main section:not(.ground-inverse) :is(p.muted, .t-lead) { color: #4a4545; }
 <?php
 }
 
-/** Bar navigasi tetap (nav-centre): Beranda, Tentang, Lapor. $aktif: 'beranda' | 'tentang' | 'lapor' | '' */
+/** Bar navigasi tetap (nav-centre): Beranda, Tentang, Dasar hukum, Lapor. */
 function navigasi(string $aktif = ''): void
 {
     $cur = fn(string $h) => $aktif === $h ? ' aria-current="page"' : '';
@@ -105,6 +105,7 @@ function navigasi(string $aktif = ''): void
     <nav class="nav__links" aria-label="Utama">
       <div class="nav__item"><a class="nav__link" href="/"<?= $cur('beranda') ?>>Beranda</a></div>
       <div class="nav__item"><a class="nav__link" href="/tentang"<?= $cur('tentang') ?>>Tentang</a></div>
+      <div class="nav__item"><a class="nav__link" href="/dasar-hukum"<?= $cur('dasar-hukum') ?>>Dasar hukum</a></div>
       <div class="nav__item"><a class="nav__link" href="/lapor"<?= $cur('lapor') ?>>Lapor</a></div>
     </nav>
     <div class="nav__actions">

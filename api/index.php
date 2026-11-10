@@ -51,6 +51,45 @@ const KAMPUS = [
     'tempat'        => '',   // contoh: 'Gedung ..., lantai ...'
 ];
 
+/*
+ * Pasal yang mungkin terkait dengan laporan (dipakai di /lapor, PDF dan beranda).
+ * Teksnya sama dengan halaman /dasar-hukum. Penentuan pasal tetap wewenang Satgas dan aparat penegak hukum.
+ */
+const PASAL = [
+    '28-2' => [
+        'nama'    => 'UU ITE Pasal 28 ayat (2) jo. Pasal 45A ayat (2)',
+        'judul'   => 'Menyebarkan kebencian berdasarkan identitas',
+        'isi'     => 'Dengan sengaja dan tanpa hak menyebarkan informasi elektronik yang menghasut, mengajak atau memengaruhi orang lain sehingga menimbulkan rasa kebencian atau permusuhan terhadap individu atau kelompok berdasarkan ras, kebangsaan, etnis, warna kulit, agama, kepercayaan, jenis kelamin atau disabilitas.',
+        'ancaman' => 'Penjara paling lama 6 tahun dan/atau denda paling banyak Rp1 miliar',
+        'catatan' => 'Menurut Putusan MK No. 105/PUU-XXII/2024, berlaku bila dilakukan dengan sengaja, di muka umum, dan menimbulkan risiko nyata diskriminasi, permusuhan atau kekerasan.',
+        'tautan'  => '/dasar-hukum#pasal-28-2',
+    ],
+    '29' => [
+        'nama'    => 'UU ITE Pasal 29 jo. Pasal 45B',
+        'judul'   => 'Ancaman kekerasan atau menakut-nakuti',
+        'isi'     => 'Mengirimkan informasi elektronik berisi ancaman kekerasan atau upaya menakut-nakuti yang ditujukan secara pribadi kepada korban.',
+        'ancaman' => 'Penjara paling lama 4 tahun dan/atau denda paling banyak Rp750 juta',
+        'catatan' => '',
+        'tautan'  => '/dasar-hukum#pasal-29',
+    ],
+    '27a' => [
+        'nama'    => 'UU ITE Pasal 27A jo. Pasal 45 ayat (4)',
+        'judul'   => 'Menyerang kehormatan atau nama baik',
+        'isi'     => 'Dengan sengaja menyerang kehormatan atau nama baik orang lain dengan cara menuduhkan suatu hal, dengan maksud agar diketahui umum, melalui sistem elektronik.',
+        'ancaman' => 'Penjara paling lama 2 tahun dan/atau denda paling banyak Rp400 juta',
+        'catatan' => 'Delik aduan: hanya diproses jika korban sendiri yang mengadu.',
+        'tautan'  => '/dasar-hukum#pasal-27a',
+    ],
+    'kampus' => [
+        'nama'    => 'Permendikbudristek No. 55 Tahun 2024',
+        'judul'   => 'Pencegahan dan penanganan kekerasan di perguruan tinggi',
+        'isi'     => 'Perguruan tinggi wajib mencegah dan menangani kekerasan di lingkungan kampus, termasuk perundungan, kekerasan psikis, diskriminasi dan intoleransi, melalui satuan tugas.',
+        'ancaman' => 'Diputuskan pimpinan perguruan tinggi berdasarkan hasil pemeriksaan Satgas',
+        'catatan' => '',
+        'tautan'  => '/dasar-hukum#aturan-kampus',
+    ],
+];
+
 /**
  * Kamus kata. Format: 'kata atau frasa' => [tipe, kategori]
  *  tipe:
@@ -494,7 +533,7 @@ if ($jalur === '/periksa') {
             'target'     => $h['target'],
             'kategori'   => $h['kategori'] ? implode(', ', $h['kategori']) : '-',
             'tingkat'    => $h['tingkat'],
-            'temuan'     => array_map(fn($t) => ['kata' => $t['kata'], 'tipe' => $namaTipe[$t['tipe']] ?? $t['tipe']], $h['temuan']),
+            'temuan'     => array_map(fn($t) => ['kata' => $t['kata'], 'tipe' => $namaTipe[$t['tipe']] ?? $t['tipe'], 'kode' => $t['tipe']], $h['temuan']),
             'html'       => $h['html'],
             'model'      => 'nahiar/hatespeech-abusive-xlm-roberta-v1',
         ]], JSON_UNESCAPED_UNICODE);

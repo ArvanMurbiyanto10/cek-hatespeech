@@ -60,7 +60,7 @@ navigasi('dasar-hukum');
       <nav class="doc-toc" aria-label="Isi halaman">
         <a href="#uu-ite">UU ITE<span>Pasal 28 (2), 27A, 29, 28 (3)</span></a>
         <a href="#kuhp">KUHP baru<span>Pasal 242, 243, 300</span></a>
-        <a href="#uu-40-2008">Peraturan lainnya<span>UU 40/2008, SE Kapolri</span></a>
+        <a href="#uu-40-2008">Peraturan lainnya<span>UU 40/2008, SE Kapolri, aturan kampus</span></a>
         <a href="#ringkasan">Ringkasan pidana<span>Semua ancaman dalam satu tabel</span></a>
       </nav>
     </div>
@@ -147,7 +147,7 @@ navigasi('dasar-hukum');
 
   <section class="doc-sec ground-surface" id="uu-40-2008" aria-labelledby="lain-h">
     <div class="wrap">
-      <div class="doc-head"><h2 id="lain-h">Peraturan lainnya</h2><p>Undang-undang khusus dan pedoman kepolisian</p></div>
+      <div class="doc-head"><h2 id="lain-h">Peraturan lainnya</h2><p>Undang-undang khusus, pedoman kepolisian dan aturan kampus</p></div>
       <div class="grid grid--top">
         <article class="card pasal m-nolift span-6">
           <h3>UU No. 40 Tahun 2008, Pasal 4 huruf b jo. Pasal 16</h3>
@@ -160,6 +160,12 @@ navigasi('dasar-hukum');
           <p class="pasal__topik">Pedoman penanganan ujaran kebencian</p>
           <p>Surat edaran ini bukan undang-undang, melainkan pedoman bagi kepolisian. Isinya menjelaskan pengertian, bentuk dan aspek yang disasar ujaran kebencian, serta mengutamakan pencegahan dan mediasi sebelum penegakan hukum.</p>
           <p class="pasal__catatan">Menjadi acuan definisi dan kategori ujaran kebencian di Cek Hatespeech.</p>
+        </article>
+        <article class="card pasal m-nolift span-12" id="aturan-kampus">
+          <h3><?= e(PASAL['kampus']['nama']) ?></h3>
+          <p class="pasal__topik"><?= e(PASAL['kampus']['judul']) ?></p>
+          <p><?= e(PASAL['kampus']['isi']) ?> Di Telkom University Purwokerto, laporan diserahkan ke <?= e(KAMPUS['tujuan']) ?>.</p>
+          <p class="pasal__catatan">Sanksi bagi pelaku: <?= e(lcfirst(PASAL['kampus']['ancaman'])) ?>. Inilah dasar kampus menangani laporan yang dibuat lewat Cek Hatespeech.</p>
         </article>
       </div>
     </div>

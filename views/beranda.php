@@ -109,6 +109,20 @@ $css = <<<'CSS'
 .darurat p { margin: 0; font-size: 15px; line-height: 1.6; color: #2c2727; }
 .darurat p + p { margin-top: 8px; }
 @media (max-width: 899px) { .faq-wrap { grid-template-columns: minmax(0, 1fr); } }
+/* ---------- #pasal ---------- */
+.pasal-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s-5); }
+.pasal-kartu { display: flex; flex-direction: column; padding: 24px; border-radius: 16px; background: #fff; border: 1px solid #ece6e5; border-top: 4px solid #a8101a; }
+.pasal-kartu .kapan { align-self: flex-start; padding: 4px 10px; border-radius: 99px; background: #fbe5e5; color: #8c0d15; font: 500 13px/1.3 var(--font-text); }
+.pasal-kartu h3 { margin: 14px 0 4px; font: 600 18px/1.3 var(--font-text); color: #1d1a1a; }
+.pasal-kartu .sub { margin: 0; font-size: 15px; color: #5c5656; }
+.pasal-kartu .isi { margin: 12px 0 0; font-size: 15px; line-height: 1.6; color: #2c2727; }
+.pasal-kartu .ancaman { margin: auto 0 0; padding-top: 16px; }
+.pasal-kartu .ancaman span { display: block; padding: 10px 12px; border-radius: 10px; background: #fdf3f3; color: #8c0d15; font-weight: 600; font-size: 15px; line-height: 1.45; }
+.pasal-kartu .catatan { margin: 10px 0 0; font-size: 13px; line-height: 1.5; color: #5c5656; }
+.pasal-kampus { margin-top: var(--s-5); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px 24px; align-items: center; padding: 18px 22px; border-radius: 14px; background: #f7f3f2; }
+.pasal-kampus p { margin: 0; font-size: 15px; line-height: 1.6; color: #2c2727; }
+.pasal-kampus b { color: #1d1a1a; }
+@media (max-width: 899px) { .pasal-grid, .pasal-kampus { grid-template-columns: minmax(0, 1fr); } }
 CSS;
 
 kepala([
@@ -185,7 +199,7 @@ navigasi('beranda');
           <ol class="alur__steps">
             <li><h3>Isi data dirimu</h3><p>Nama, NIM, program studi dan kontak yang bisa dihubungi Satgas.</p></li>
             <li><h3>Ceritakan kejadiannya</h3><p>Kapan, di mana atau lewat aplikasi apa, dan siapa yang terlibat kalau kamu tahu.</p></li>
-            <li><h3>Tempel bukti, AI memeriksa</h3><p>Salin pesan atau komentarnya. Model XLM-RoBERTa memberi skor ujaran kebencian dan kata kasar. Tangkapan layar bisa dilampirkan.</p></li>
+            <li><h3>Tempel bukti, AI memeriksa</h3><p>Salin pesan atau komentarnya. Model XLM-RoBERTa memberi skor ujaran kebencian dan kata kasar, lalu aplikasi menunjukkan pasal UU ITE yang mungkin terkait.</p></li>
             <li><h3>Unduh PDF, serahkan ke kampus</h3><p>Cetak atau kirim PDF ke <?= e($tujuan) ?>. Simpan juga bukti aslinya.</p></li>
           </ol>
           <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/lapor">Buat laporan<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
@@ -203,9 +217,37 @@ navigasi('beranda');
             <p class="kertas__kutip">"Kaum mereka selalu bikin masalah di kampung ini"</p>
             <div class="kertas__status"><span>Perlu ditinjau manusia</span><span>65,21%</span></div>
             <div class="kertas__bar"><i></i></div>
+            <p class="kertas__judul">4. Dasar hukum yang mungkin terkait</p>
+            <p>UU ITE Pasal 28 ayat (2) jo. Pasal 45A ayat (2)<br>Permendikbudristek No. 55 Tahun 2024</p>
             <div class="kertas__ttd"><div>Purwokerto, 11 November 2026<span></span>( Dimas Pratama )</div></div>
           </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASAL: UU ITE yang bisa menjerat pelaku, dipilih otomatis di laporan -->
+  <section class="doc-sec" id="pasal" aria-labelledby="pasal-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="pasal-h">Pasal UU ITE yang bisa menjerat pelaku</h2>
+        <p>Saat kamu membuat laporan, aplikasi memilih pasal yang mungkin terkait dari hasil AI dan bentuk perundungan yang kamu centang, lalu mencetaknya di PDF.</p>
+      </div>
+      <div class="pasal-grid">
+<?php foreach ([['28-2', 'Kalau kamu diserang karena suku, agama atau ras'], ['29', 'Kalau kamu diancam lewat pesan'], ['27a', 'Kalau kamu dihina atau dituduh di depan umum']] as [$k, $kapan]): $p = PASAL[$k]; ?>
+        <article class="pasal-kartu">
+          <span class="kapan"><?= e($kapan) ?></span>
+          <h3><?= e($p['nama']) ?></h3>
+          <p class="sub"><?= e($p['judul']) ?></p>
+          <p class="isi"><?= e($p['isi']) ?></p>
+          <p class="ancaman"><span><?= e($p['ancaman']) ?></span></p>
+          <?php if ($p['catatan']): ?><p class="catatan"><?= e($p['catatan']) ?></p><?php endif; ?>
+        </article>
+<?php endforeach; ?>
+      </div>
+      <div class="pasal-kampus">
+        <p><b><?= e(PASAL['kampus']['nama']) ?></b> mewajibkan kampus menangani perundungan meski tidak ada unsur pidana. Sanksi bagi pelaku: <?= e(lcfirst(PASAL['kampus']['ancaman'])) ?>.</p>
+        <a class="link" href="/dasar-hukum">Baca semua pasal dan unsurnya</a>
       </div>
     </div>
   </section>
@@ -239,7 +281,7 @@ navigasi('beranda');
           <p>Untuk bercerita dan menenangkan diri, sebelum atau sesudah melapor.</p>
         </article>
       </div>
-      <p class="aturan">Kampus wajib mencegah dan menangani kekerasan, termasuk perundungan, menurut Permendikbudristek No. 55 Tahun 2024 tentang Pencegahan dan Penanganan Kekerasan di Lingkungan Perguruan Tinggi. Penghinaan berdasarkan suku, agama atau ras di internet juga diatur UU ITE. <a href="/dasar-hukum">Baca dasar hukumnya</a></p>
+      <p class="aturan">Kalau pelaku juga perlu diproses pidana menurut UU ITE, Satgas dapat mendampingimu melapor ke kepolisian. <a href="/dasar-hukum">Baca dasar hukumnya</a></p>
     </div>
   </section>
 

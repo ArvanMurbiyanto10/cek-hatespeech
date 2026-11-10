@@ -10,6 +10,7 @@ $konfig = [
     'tujuanLengkap' => KAMPUS['tujuan_lengkap'],
     'kampus'        => KAMPUS['nama'],
     'maks'          => MAKS_KARAKTER,
+    'pasal'         => PASAL,
 ];
 
 $tempat = ['Grup WhatsApp', 'Chat pribadi (WhatsApp, Line, Telegram)', 'Instagram', 'TikTok', 'X (Twitter)', 'Discord', 'Di kampus secara langsung', 'Lainnya'];
@@ -77,6 +78,21 @@ $css = <<<'CSS'
 .pesan--galat { background: #fbe9e6; color: #8f2016; }
 .pesan--basi { background: #fdf2e0; color: #6e4100; }
 .pesan[hidden] { display: none; }
+
+/* pasal yang mungkin terkait */
+.pasal-box { margin-top: var(--s-6); padding: 20px; border-radius: 14px; background: #fcf8f7; border: 1px solid #efe2e1; }
+.pasal-box__judul { margin: 0; font: 500 18px/1.3 var(--font-text); color: var(--ink); }
+.pasal-box__info { margin: 4px 0 14px; font-size: 14px; line-height: 1.5; color: #5c5656; }
+.pasal { padding: 14px 16px; border-radius: 12px; background: #fff; border: 1px solid #ece2e1; border-left: 3px solid #a8101a; }
+.pasal + .pasal { margin-top: 10px; }
+.pasal--kampus { border-left-color: #5c5656; }
+.pasal h4 { margin: 0; font: 600 15px/1.35 var(--font-text); color: #8c0d15; }
+.pasal--kampus h4 { color: #2c2727; }
+.pasal p { margin: 4px 0 0; font-size: 14px; line-height: 1.55; color: #2c2727; }
+.pasal .pasal__ancaman { margin-top: 8px; font-weight: 500; }
+.pasal .pasal__alasan { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+.pasal .pasal__alasan span { padding: 2px 8px; border-radius: 99px; background: #f4eeed; font-size: 12px; color: #4a4545; }
+.pasal a { font-size: 13px; color: #8c0d15; text-decoration: underline; text-underline-offset: 3px; }
 
 /* tangkapan layar */
 .unggah { display: grid; place-items: center; gap: 4px; min-height: 120px; padding: 18px; border: 1.5px dashed #d2c6c4; border-radius: 12px; background: #fcfaf9; text-align: center; cursor: pointer; font-size: 15px; }
@@ -194,6 +210,42 @@ $js = <<<'JS'
     $('gambar-info').textContent = gambar.length ? gambar.length + ' dari 3 terlampir' : 'PNG, JPG atau WebP, maksimal 3';
   }
 
+  /* ---------- pasal yang mungkin terkait ---------- */
+  function pasalTerpilih() {
+    var b = bentukDipilih(), h = hasilAI && nilai('bukti') === teksDiperiksa ? hasilAI : null;
+    var kode = h ? (h.temuan || []).map(function (t) { return t.kode; }) : [];
+    var punya = function (k) { return kode.indexOf(k) > -1; }, ada = function (x) { return b.indexOf(x) > -1; };
+    var daftar = [];
+    function tambah(k, alasan) { if (!alasan.length) return; daftar.push({ k: k, p: K.pasal[k], alasan: alasan }); }
+    var a28 = [], a29 = [], a27 = [];
+    if (h && h.label === 'hate') a28.push('AI: indikasi kuat ujaran kebencian');
+    if (h && h.label === 'tinjau' && (punya('kelompok') || punya('slur'))) a28.push('AI: perlu ditinjau, menyasar kelompok');
+    if (ada('Ujaran kebencian (suku, agama, ras)')) a28.push('Kamu memilih: ujaran kebencian (suku, agama, ras)');
+    if (punya('ancaman')) a29.push('Kamus menyorot kata ancaman');
+    if (ada('Ancaman')) a29.push('Kamu memilih: ancaman');
+    if (h && h.label === 'abusive') a27.push('AI: bahasa kasar');
+    if (punya('individu') || punya('fisik')) a27.push('Kamus menyorot hinaan ke perorangan');
+    if (ada('Hinaan atau ejekan')) a27.push('Kamu memilih: hinaan atau ejekan');
+    tambah('28-2', a28); tambah('29', a29); tambah('27a', a27);
+    daftar.push({ k: 'kampus', p: K.pasal.kampus, alasan: ['Berlaku untuk setiap laporan perundungan di kampus'] });
+    return daftar;
+  }
+  function tampilPasal() {
+    var w = $('pasal-list'); w.innerHTML = '';
+    pasalTerpilih().forEach(function (d) {
+      var el = document.createElement('div'); el.className = 'pasal' + (d.k === 'kampus' ? ' pasal--kampus' : '');
+      var h4 = document.createElement('h4'); h4.textContent = d.p.nama; el.appendChild(h4);
+      var j = document.createElement('p'); j.textContent = d.p.judul + '. ' + d.p.isi; el.appendChild(j);
+      var an = document.createElement('p'); an.className = 'pasal__ancaman'; an.textContent = (d.k === 'kampus' ? 'Sanksi: ' : 'Ancaman pidana: ') + d.p.ancaman + '.'; el.appendChild(an);
+      if (d.p.catatan) { var c = document.createElement('p'); c.textContent = d.p.catatan; c.style.color = '#5c5656'; el.appendChild(c); }
+      var al = document.createElement('p'); al.className = 'pasal__alasan';
+      d.alasan.forEach(function (t) { var s = document.createElement('span'); s.textContent = t; al.appendChild(s); });
+      el.appendChild(al);
+      var a = document.createElement('a'); a.href = d.p.tautan; a.target = '_blank'; a.rel = 'noopener'; a.textContent = 'Baca unsur pasalnya'; el.appendChild(a);
+      w.appendChild(el);
+    });
+  }
+
   /* ---------- ringkasan dan validasi ---------- */
   function nilai(id) { return ($(id).value || '').trim(); }
   function bentukDipilih() { return Array.prototype.map.call(form.querySelectorAll('input[name=bentuk]:checked'), function (c) { return c.value; }); }
@@ -207,6 +259,7 @@ $js = <<<'JS'
     };
   }
   function perbarui() {
+    tampilPasal();
     var c = cekBagian();
     ['diri', 'kejadian', 'bukti', 'ai', 'setuju'].forEach(function (k) {
       var li = $('r-' + k); li.classList.toggle('ok', c[k]);
@@ -339,8 +392,27 @@ $js = <<<'JS'
     }
     if (gambar.length) { y += 1; baris('Tangkapan layar', gambar.length + ' gambar, lihat halaman Lampiran'); }
 
+    cukup(60); // judul tidak tertinggal sendirian di bawah halaman
+    judul('4. Dasar hukum yang mungkin terkait');
+    pasalTerpilih().forEach(function (d) {
+      doc.setFontSize(10.5);
+      var isi = doc.splitTextToSize(aman(d.p.judul + '. ' + d.p.isi), W - 6);
+      cukup(isi.length * 5 + 26);
+      var y0 = y - 4;
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(11); warna(d.k === 'kampus' ? TINTA : [140, 13, 21]); doc.text(aman(d.p.nama), L + 5, y); y += 5.5;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(10); warna(TINTA); doc.text(isi, L + 5, y); y += isi.length * 4.7 + 1;
+      doc.setFont('helvetica', 'bold'); var an = doc.splitTextToSize(aman((d.k === 'kampus' ? 'Sanksi: ' : 'Ancaman pidana: ') + d.p.ancaman), W - 6); doc.text(an, L + 5, y); y += an.length * 4.7 + 1;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); warna(ABU);
+      var al = doc.splitTextToSize(aman('Dasar pemilihan: ' + d.alasan.join('; ') + (d.p.catatan ? '. ' + d.p.catatan : '')), W - 6); doc.text(al, L + 5, y); y += al.length * 4.2 + 2;
+      // warna isian diatur tepat sebelum garis: di PDF warna teks memakai warna isian yang sama
+      if (d.k === 'kampus') doc.setFillColor(150, 142, 142); else doc.setFillColor(MERAH[0], MERAH[1], MERAH[2]);
+      doc.rect(L, y0, 1.2, y - y0 - 1, 'F');
+      y += 3;
+    });
+    paragraf('Daftar ini dipilih otomatis oleh aplikasi dari hasil AI dan isian pelapor. Penentuan pasal tetap wewenang Satgas dan aparat penegak hukum.', 9, ABU);
+
     cukup(80); // pernyataan dan tanda tangan selalu di halaman yang sama
-    judul('4. Pernyataan');
+    judul('5. Pernyataan');
     paragraf('Saya menyatakan bahwa informasi dalam laporan ini saya tulis dengan sebenar-benarnya dan saya bersedia dihubungi untuk keterangan lebih lanjut.');
     cukup(42); y += 6;
     doc.setFont('helvetica', 'normal'); doc.setFontSize(10.5); warna(TINTA);
@@ -454,6 +526,12 @@ navigasi('lapor');
                 <p class="ai__teks" id="ai-teks"></p>
                 <p class="ai__catatan">Penilaian model AI, bukan putusan. Hasil apa pun tetap boleh kamu laporkan.</p>
               </div>
+            </div>
+
+            <div class="pasal-box" aria-live="polite">
+              <p class="pasal-box__judul">Pasal yang mungkin terkait</p>
+              <p class="pasal-box__info">Dipilih otomatis dari hasil AI dan bentuk perundungan yang kamu centang, lalu ikut dicetak di PDF. Penentuan pasal tetap wewenang Satgas dan aparat penegak hukum.</p>
+              <div id="pasal-list"></div>
             </div>
 
             <div class="f" style="margin-top: var(--s-6)">
