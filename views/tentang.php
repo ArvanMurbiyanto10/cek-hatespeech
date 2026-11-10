@@ -51,8 +51,8 @@ navigasi('tentang');
       <div class="grid grid--top">
         <div class="span-6">
           <h1 id="tt-h">Tentang aplikasi Cek Hatespeech</h1>
-          <p class="t-lead">Cek Hatespeech adalah aplikasi web yang mendeteksi ujaran kebencian dan bahasa kasar pada teks berbahasa Indonesia, dibuat sebagai tugas akhir di Telkom University Purwokerto.</p>
-          <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+          <p class="t-lead">Cek Hatespeech membantu mahasiswa Telkom University Purwokerto yang mengalami perundungan atau ujaran kebencian menyusun laporan: bukti diperiksa model AI, lalu semuanya dirangkum dalam PDF untuk diserahkan ke Satgas PPKPT kampus. Aplikasi ini dibuat sebagai tugas akhir.</p>
+          <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/lapor">Buat laporan<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
         </div>
         <div class="frame frame--photo doc-foto span-6 start-7">
           <img class="frame__img" src="<?= e(urlFoto('tentang')) ?>" alt="Empat orang berdiri sambil membaca layar ponsel masing-masing" fetchpriority="high" data-source="library" data-subject="orang memakai media sosial">
@@ -66,15 +66,15 @@ navigasi('tentang');
       <div class="grid grid--top">
         <div class="span-5"><h2 id="lb-h">Latar belakang dan tujuan</h2></div>
         <div class="span-6 start-7 doc-prosa">
-          <p>Media sosial memudahkan siapa saja menyampaikan pendapat, tetapi juga menjadi tempat tersebarnya ujaran yang menyerang orang atau kelompok karena suku, agama, ras, gender atau kondisi fisiknya.</p>
-          <p>Volume komentar yang besar, ragam penulisan seperti singkatan, bahasa alay dan campuran bahasa daerah, serta terbatasnya moderator membuat pemeriksaan manual sulit. Cek Hatespeech dibuat sebagai alat bantu untuk mengenali ujaran kebencian dengan cepat.</p>
+          <p>Perundungan di kalangan mahasiswa banyak terjadi lewat grup kelas, kolom komentar dan pesan pribadi. Banyak korban tidak yakin apakah yang dialaminya termasuk perundungan, tidak tahu harus melapor ke mana, dan tidak tahu bukti apa yang perlu disiapkan.</p>
+          <p>Cek Hatespeech menjawab tiga kebingungan itu: menjelaskan tanda perundungan, menilai teks bukti dengan model XLM-RoBERTa yang dilatih untuk ujaran kebencian dan bahasa kasar berbahasa Indonesia, lalu menyusun laporan PDF yang rapi untuk Satgas PPKPT Telkom University Purwokerto.</p>
         </div>
       </div>
       <div class="grid grid--top" style="margin-top: var(--s-8)">
-        <article class="card m-nolift span-3"><span class="doc-no">1</span><p>Mengklasifikasikan teks menjadi ujaran kebencian, bahasa kasar atau aman.</p></article>
-        <article class="card m-nolift span-3"><span class="doc-no">2</span><p>Menerapkan model XLM-RoBERTa yang telah dilatih ulang untuk deteksi ujaran kebencian.</p></article>
-        <article class="card m-nolift span-3"><span class="doc-no">3</span><p>Menyajikan putusan yang mudah dibaca, lengkap dengan skor dan kata yang disorot.</p></article>
-        <article class="card m-nolift span-3"><span class="doc-no">4</span><p>Mengajak pengguna lebih berhati-hati sebelum mengunggah komentar atau postingan.</p></article>
+        <article class="card m-nolift span-3"><span class="doc-no">1</span><p>Membantu mahasiswa mengenali tanda perundungan dan ujaran kebencian.</p></article>
+        <article class="card m-nolift span-3"><span class="doc-no">2</span><p>Menerapkan model XLM-RoBERTa untuk menilai teks bukti secara otomatis.</p></article>
+        <article class="card m-nolift span-3"><span class="doc-no">3</span><p>Menyusun laporan PDF berisi data pelapor, kronologi, bukti dan hasil AI.</p></article>
+        <article class="card m-nolift span-3"><span class="doc-no">4</span><p>Menjaga privasi pelapor: data diri tidak dikirim ke server.</p></article>
       </div>
     </div>
   </section>
@@ -85,9 +85,9 @@ navigasi('tentang');
         <div class="span-6">
           <div class="doc-head"><h2 id="pg-h">Siapa yang memakai Cek Hatespeech</h2></div>
           <div class="grid grid--top">
-            <article class="card m-nolift span-12"><h3>Pengguna media sosial</h3><p>Memeriksa kalimat sebelum diunggah agar tidak tanpa sadar menyebarkan ujaran kebencian.</p></article>
-            <article class="card m-nolift span-12"><h3>Moderator dan admin grup</h3><p>Menyaring komentar di grup, forum atau kolom komentar sebelum ditinjau lebih lanjut.</p></article>
-            <article class="card m-nolift span-12"><h3>Peneliti dan mahasiswa</h3><p>Melihat penerapan pemrosesan bahasa alami untuk masalah sosial di Indonesia.</p></article>
+            <article class="card m-nolift span-12"><h3>Mahasiswa yang menjadi korban</h3><p>Menyusun bukti dan laporan tanpa harus tahu format resmi lebih dulu.</p></article>
+            <article class="card m-nolift span-12"><h3>Teman yang menjadi saksi</h3><p>Melaporkan perundungan yang dilihatnya di grup kelas atau di kampus.</p></article>
+            <article class="card m-nolift span-12"><h3>Satgas PPKPT dan dosen wali</h3><p>Menerima laporan yang sudah tersusun: identitas, kronologi, bukti dan hasil pemeriksaan AI.</p></article>
           </div>
         </div>
         <div class="frame frame--photo span-6 start-7" style="aspect-ratio: 4 / 5">
@@ -182,7 +182,7 @@ navigasi('tentang');
         <article class="card m-nolift span-4"><h3>Bias data latih</h3><p>Istilah baru atau sangat lokal mungkin belum dikenali model.</p></article>
         <article class="card m-nolift span-4"><h3>Sasaran dan kategori</h3><p>Model hanya menilai dua label; sasaran dan kategori diperkirakan kamus kata.</p></article>
         <article class="card m-nolift span-4"><h3>Server model terpisah</h3><p>Jika server model sedang mati, pengecekan untuk sementara tidak bisa dilakukan.</p></article>
-        <article class="card m-nolift span-4"><h3>Privasi teks</h3><p>Aplikasi web tidak menyimpan teks. Hindari memasukkan data pribadi.</p></article>
+        <article class="card m-nolift span-4"><h3>Bukan kanal resmi</h3><p>Web ini tidak mengirim laporan ke kampus. Pelapor sendiri yang menyerahkan PDF ke Satgas PPKPT.</p></article>
       </div>
     </div>
   </section>

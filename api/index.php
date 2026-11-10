@@ -38,6 +38,19 @@ const PENGEMBANG = [
     'tahun'      => '2026',
 ];
 
+/*
+ * Tujuan laporan di kampus. Isi kontak HANYA dari kanal resmi Telkom University Purwokerto
+ * (website kampus, akun Instagram resmi, atau bagian kemahasiswaan). Baris kosong tidak ditampilkan.
+ */
+const KAMPUS = [
+    'nama'          => 'Telkom University Purwokerto',
+    'tujuan'        => 'Satgas PPKPT Telkom University Purwokerto',
+    'tujuan_lengkap'=> 'Satuan Tugas Pencegahan dan Penanganan Kekerasan di Perguruan Tinggi (Satgas PPKPT)',
+    'email'         => '',   // contoh: 'satgasppkpt@...'  (isi dari kanal resmi)
+    'whatsapp'      => '',   // contoh: '08xx-xxxx-xxxx'    (isi dari kanal resmi)
+    'tempat'        => '',   // contoh: 'Gedung ..., lantai ...'
+];
+
 /**
  * Kamus kata. Format: 'kata atau frasa' => [tipe, kategori]
  *  tipe:
@@ -441,7 +454,57 @@ function inisial(string $nama): string
 /* ============================ Router halaman ============================ */
 
 $jalur = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/'), '/');
-$daftarHalaman = ['' => 'beranda', '/cek' => 'cek', '/dasar-hukum' => 'dasar-hukum', '/tentang' => 'tentang', '/kredit' => 'kredit'];
+
+// Alamat lama /cek pindah ke /lapor.
+if ($jalur === '/cek') {
+    header('Location: /lapor', true, 301);
+    exit;
+}
+
+// Pemeriksaan bukti oleh AI untuk halaman /lapor (JSON). Hanya teks bukti yang dikirim; data diri tetap di browser.
+if ($jalur === '/periksa') {
+    header('Content-Type: application/json; charset=utf-8');
+    header('Cache-Control: no-store');
+    if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') {
+        http_response_code(405);
+        echo json_encode(['ok' => false, 'galat' => 'Gunakan POST.']);
+        exit;
+    }
+    $masuk = json_decode((string)file_get_contents('php://input'), true);
+    $bukti = trim((string)($masuk['teks'] ?? ''));
+    $panjang = function_exists('mb_strlen') ? mb_strlen($bukti, 'UTF-8') : strlen($bukti);
+    if ($bukti === '') {
+        echo json_encode(['ok' => false, 'galat' => 'Tempel dulu teks bukti yang ingin diperiksa.']);
+        exit;
+    }
+    if ($panjang > MAKS_KARAKTER) {
+        echo json_encode(['ok' => false, 'galat' => 'Teks bukti terlalu panjang (maksimal ' . MAKS_KARAKTER . ' karakter).']);
+        exit;
+    }
+    try {
+        $h = deteksiHatespeech($bukti);
+        echo json_encode(['ok' => true, 'hasil' => [
+            'label'      => $h['label'],
+            'judul'      => $infoLabel[$h['label']]['judul'],
+            'penjelasan' => $h['penjelasan'],
+            'hs'         => $h['hs'],
+            'ab'         => $h['ab'],
+            'hsPersen'   => persen($h['hs']),
+            'abPersen'   => persen($h['ab']),
+            'target'     => $h['target'],
+            'kategori'   => $h['kategori'] ? implode(', ', $h['kategori']) : '-',
+            'tingkat'    => $h['tingkat'],
+            'temuan'     => array_map(fn($t) => ['kata' => $t['kata'], 'tipe' => $namaTipe[$t['tipe']] ?? $t['tipe']], $h['temuan']),
+            'html'       => $h['html'],
+            'model'      => 'nahiar/hatespeech-abusive-xlm-roberta-v1',
+        ]], JSON_UNESCAPED_UNICODE);
+    } catch (RuntimeException $ex) {
+        echo json_encode(['ok' => false, 'galat' => $ex->getMessage()], JSON_UNESCAPED_UNICODE);
+    }
+    exit;
+}
+
+$daftarHalaman = ['' => 'beranda', '/lapor' => 'lapor', '/dasar-hukum' => 'dasar-hukum', '/tentang' => 'tentang', '/kredit' => 'kredit'];
 $halaman = $daftarHalaman[$jalur] ?? null;
 if ($halaman === null) {
     http_response_code(404);

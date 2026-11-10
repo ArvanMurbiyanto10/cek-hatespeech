@@ -1,100 +1,119 @@
 <?php
 /*
- * Beranda Cek Hatespeech.
- * type: software (alat AI) · kind software
- * deal: hero centred · palette white-mint-tiles (dasar putih seperti konsol moderasi, mint menjawab
- *       status "aman" yang dicari pengguna) · type host · nav-centre · close-word · footer-dark ·
- *       rhythm dark-band (#hasil) · buttons arrow · mark dots · lit ground sand ·
- *       effect grain-gradient (bingkai hero) · card grounds: tidak ada yang cocok (slot dilepas) ·
- *       grounds: #cara-kerja bg-mist, #faq bg-band
- * moments: liquid-type (#pernyataan: ancaman pidana Pasal 28 ayat (2) sebagai satu kalimat besar)
- * screens @1440: hero 1 · cara-kerja 2 · hasil 2 · pernyataan 1 · hukum 1 · model 1 · faq 1 · closing 1
+ * Beranda: alat bantu melapor perundungan untuk mahasiswa Telkom University Purwokerto.
+ * Alur: kenali tanda -> 4 langkah -> serahkan ke Satgas PPKPT -> privasi -> pertanyaan.
+ * Warna merah putih. Semua bagian setelah hero memakai doc-sec (tinggi mengikuti isi).
  */
 
+$tujuan = KAMPUS['tujuan'];
+$kontak = array_filter([
+    'Email'    => KAMPUS['email'],
+    'WhatsApp' => KAMPUS['whatsapp'],
+    'Tempat'   => KAMPUS['tempat'],
+]);
+
 $css = <<<'CSS'
-/* ---------- hero: jendela antrean cek di bingkai bercahaya (page CSS di dalam visual) ---------- */
-.hero__window { background:
-  radial-gradient(70% 90% at 22% 18%, #f4ede2 0%, #e9dfcf 38%, transparent 70%),
-  radial-gradient(80% 90% at 82% 90%, #cfdcc9 0%, transparent 62%),
-  linear-gradient(160deg, #e7dccb, #d9ccb7 55%, #cdbfa6); }
-.hero--centred h1 .mark { width: .7em; height: .7em; vertical-align: -.04em; margin-inline: .04em .12em; }
-.hw { background: #fff; color: #1e1f21; border-radius: 14px; overflow: hidden; font: 400 14px/1.45 var(--font-text);
-      box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 28px 64px -30px rgb(0 0 0 / .45); text-align: left; }
-.hw__bar { display: flex; align-items: center; gap: 10px; height: 40px; padding: 0 14px; border-bottom: 1px solid rgb(0 0 0 / .07); font-size: 13px; color: #5d6268; }
-.hw__bar b { color: #1e1f21; font-weight: 500; } .hw__sp { flex: 1; }
-.hw__dots { display: flex; gap: 6px; } .hw__dots i { width: 10px; height: 10px; border-radius: 50%; background: #dcdfe2; }
-.hw__body { display: grid; grid-template-columns: 272px minmax(0, 1fr); min-height: 372px; }
-.hw__list { border-right: 1px solid rgb(0 0 0 / .07); padding: 10px; display: grid; align-content: start; gap: 2px; }
-.hw__q { height: 34px; margin-bottom: 6px; border-radius: 9px; background: #f3f3f3; display: flex; align-items: center; padding: 0 10px; color: #6e7378; font-size: 13px; }
-.hw__t { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 10px; padding: 8px 10px; border-radius: 9px; font-size: 13px; }
-.hw__t.is-on { background: #f3f3f3; }
-.hw__t span { color: #33363a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.hw__t time { color: #6e7378; }
-.hw__convo { display: grid; gap: 10px; align-content: start; padding: 16px 18px; }
-.hw__me { justify-self: end; max-width: 86%; padding: 10px 14px; border-radius: 16px 16px 6px 16px; background: #f2f2f0; color: #121314; }
-.hw__tool { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #6e7378; }
-.hw__tool::before { content: ""; width: 12px; height: 12px; border-radius: 50%; border: 2px solid currentColor; border-right-color: transparent; }
-.hw__bot { max-width: 90%; padding: 10px 14px; border-radius: 16px 16px 16px 6px; background: #232323; color: #f5f5f5; }
-.hw__bot small { display: inline; margin-left: 6px; font-size: 13px; color: #c9c9c9; white-space: nowrap; }
-.hw__acts { display: flex; gap: 8px; } .hw__acts span { height: 30px; padding: 0 12px; border-radius: 99px; display: inline-flex; align-items: center; font-size: 13px; font-weight: 500; background: #a1ffcb; color: #1b3a29; }
-.hw__acts span + span { background: #f0f0f0; color: #232323; }
-.st { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 8px; border-radius: 99px; font: 500 12px/1 var(--font-text); white-space: nowrap; background: #efefef; color: #3c3f43; }
-.st::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
-.st--kuat { background: #fbe6e3; color: #a3271b; } .st--tinjau { background: #fdf0dc; color: #7d4a00; }
-.st--kasar { background: #e9eef5; color: #2e4462; } .st--aman { background: #e1f5e8; color: #17603b; }
-@media (max-width: 639px) { .hw__body { grid-template-columns: 1fr; min-height: 268px; } .hw__list, .hw__tool { display: none; } .hw__bar .hw__sp ~ span { display: none; } .hw__bot small { display: none; } }
+/* ---------- hero ---------- */
+.hero--split .hero__kicker { display: inline-flex; align-items: center; gap: 8px; font: 500 14px/1.3 var(--font-text); color: var(--p-accent-ink); background: var(--p-accent); padding: 6px 12px; border-radius: 99px; }
+.hero--split .hero__kicker .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--p-action); }
+.hero__fakta { margin-top: var(--s-5); display: flex; flex-wrap: wrap; gap: 6px 18px; font: 400 14px/1.4 var(--font-text); color: #4a4545; }
+.hero__fakta span { display: inline-flex; align-items: center; gap: 8px; }
+.hero__fakta span::before { content: ""; width: 14px; height: 14px; border-radius: 50%; background: var(--p-accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 14'%3E%3Cpath d='M4 7.2l2 2 4-4.4' fill='none' stroke='%23a8101a' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat; }
+.hero--split .hero__media img { object-position: 40% 40%; }
+.hero--split .ly-float__title { max-width: 26ch; }
+.hero--split h1 { font-size: clamp(38px, 4.3vw, 62px); line-height: 1.04; max-width: 14ch; }
 
-/* ---------- #cara-kerja: jendela yang digambar untuk tiap langkah ---------- */
-.pcw { width: 100%; height: 100%; background: #fff; color: #1e1f21; border-radius: 14px; overflow: hidden; font: 400 14px/1.5 var(--font-text); box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 24px 56px -30px rgb(0 0 0 / .4); }
-.pcw__code { margin: 0; padding: 20px 22px; font: 400 14px/1.7 var(--font-mono); color: #232323; white-space: pre-wrap; overflow-wrap: anywhere; }
-.pcw__code .k { color: #2e4462; } .pcw__code .s { color: #17603b; } .pcw__code .n { color: #a3271b; }
-.pcw__rows { display: grid; padding: 0 22px 20px; }
-.pcw__rows div { display: flex; justify-content: space-between; gap: 12px; padding: 12px 0; border-top: 1px solid rgb(0 0 0 / .07); font-size: 14px; }
-.pcw__rows b { font-weight: 500; font-variant-numeric: tabular-nums; }
-@media (max-width: 359px) { .nav__bar { gap: 8px; } .nav__logo { font-size: 15px; } }
+/* ---------- bagian umum ---------- */
+.sec-head { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: var(--s-6) var(--gutter); align-items: end; margin-bottom: var(--s-8); }
+.sec-head p { margin: 0; font-size: 18px; line-height: 1.6; color: #4a4545; max-width: 52ch; }
+@media (max-width: 899px) { .sec-head { grid-template-columns: minmax(0, 1fr); } }
 
-/* ---------- #hasil: putusan kecil di panel kartu (gelap) ---------- */
-#hasil .panel { --p-h: 300px; }
-#hasil .ui-panel.vd { --u-bg: #fff; background: #fff; color: #1e1f21; border-radius: 14px; min-height: 0; box-shadow: 0 0 0 1px rgb(0 0 0 / .06), 0 24px 48px -24px rgb(0 0 0 / .5); }
-#hasil .vd__head span, #hasil .vd__row span { color: #4a4f55; }
-/* #cara-kerja: kartu langkah */
-#cara-kerja .langkah .card { display: flex; flex-direction: column; }
-#cara-kerja .langkah .card > .panel { margin-top: auto; }
-#cara-kerja .langkah .card > p { margin-bottom: 28px; }
-#cara-kerja .langkah .panel { --p-h: 280px; padding: 18px; background: #e9eee9; overflow: hidden; }
-#cara-kerja .langkah .panel--flush { padding: 0; }
-.langkah .pcw { box-shadow: 0 0 0 1px rgb(0 0 0 / .08); }
-.langkah .pcw__code { padding: 14px 16px; font-size: 13px; line-height: 1.6; }
-.langkah .pcw__rows { padding: 0 16px 12px; } .langkah .pcw__rows div { padding: 8px 0; font-size: 13px; }
-.langkah__img { width: 100%; height: 100%; object-fit: cover; object-position: top left; display: block; }
-/* #pernyataan: kalimat besar di tengah */
-section#pernyataan { display: grid; align-content: center; }
-#pernyataan > .wrap { width: 100%; }
-#pernyataan .section-head { max-width: none; margin-inline: auto; text-align: center; display: grid; justify-items: center; gap: var(--s-5); }
-#pernyataan .mo-lt__type { font-size: clamp(56px, 10.5vw, 168px); line-height: .92; max-width: 12ch; }
-#pernyataan .t-lead { margin-inline: auto; }
-.vd { width: 100%; min-height: 330px; padding: 16px 18px; font: 400 13px/1.45 var(--font-text); color: #1e1f21; }
-.vd__head { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 10px; font-size: 13px; color: #6e7378; }
-.vd__teks { margin: 0 0 12px; font-size: 14px; color: #232323; }
-.vd__row { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 10px; margin-top: 10px; font-size: 13px; color: #33363a; }
-.vd__row b { font-weight: 500; color: #1e1f21; font-variant-numeric: tabular-nums; }
-.vd__row i { grid-column: 1 / -1; display: block; height: 6px; border-radius: 99px; background: #ececec; overflow: hidden; }
-.vd__row i::after { content: ""; display: block; height: 100%; width: var(--v); border-radius: inherit; background: #232323; }
-.vd__row--on i::after { background: #1f9d5c; }
-.vd__ref { margin-top: 14px; padding-top: 10px; border-top: 1px solid rgb(0 0 0 / .07); font-size: 13px; color: #33363a; }
-@media (max-width: 639px) { #hasil .panel { --p-h: 250px; } #cara-kerja .langkah .panel { --p-h: 240px; } }
+/* ---------- #tanda: percakapan grup + daftar tanda ---------- */
+.tanda { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: var(--gutter); align-items: start; }
+.chat { background: #fff; border: 1px solid #ece6e5; border-radius: 18px; overflow: hidden; box-shadow: 0 30px 60px -40px rgb(80 10 15 / .35); font: 400 15px/1.45 var(--font-text); }
+.chat__bar { display: flex; align-items: center; gap: 12px; padding: 14px 18px; border-bottom: 1px solid #f0eaea; }
+.chat__ava { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: #f3dcdc; color: #8c0d15; font: 600 13px/1 var(--font-text); flex: none; }
+.chat__bar b { display: block; font-weight: 600; font-size: 15px; color: #1d1a1a; }
+.chat__bar small { font-size: 13px; color: #6a6262; }
+.chat__body { display: grid; gap: 12px; padding: 18px; background: #fbf8f7; }
+.msg { max-width: 84%; padding: 9px 13px 10px; border-radius: 4px 14px 14px 14px; background: #fff; border: 1px solid #efe8e7; color: #1d1a1a; }
+.msg b { display: block; font-size: 13px; font-weight: 600; margin-bottom: 2px; }
+.msg time { display: block; margin-top: 4px; font-size: 12px; color: #8a8181; text-align: right; }
+.msg--foto .msg__img { margin: 4px 0 2px; height: 96px; border-radius: 8px; background: linear-gradient(135deg, #d9cfcd, #bfb1ae); display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 500; }
+.msg__tag { display: inline-block; margin-top: 6px; padding: 2px 8px; border-radius: 99px; background: #fbe5e5; color: #8c0d15; font-size: 12px; font-weight: 500; }
+.msg:nth-child(2) b { color: #9b4a00; } .msg:nth-child(3) b { color: #23608f; } .msg:nth-child(4) b { color: #9b4a00; } .msg:nth-child(5) b { color: #5b3b8c; }
+.chat__info { margin: 0; text-align: center; font-size: 13px; color: #6a6262; }
+.tanda__list { list-style: none; margin: 0; padding: 0; border-top: 1px solid #ece6e5; }
+.tanda__list li { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; padding: 16px 0; border-bottom: 1px solid #ece6e5; }
+.tanda__list li > span { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--p-accent); color: var(--p-accent-ink); font: 600 14px/1 var(--font-text); }
+.tanda__list h3 { font: 500 18px/1.35 var(--font-text); margin: 0; }
+.tanda__list p { margin: 2px 0 0; font-size: 15px; line-height: 1.55; color: #4a4545; }
+.tanda__catatan { margin-top: var(--s-5); padding: 14px 16px; border-left: 3px solid var(--p-action); background: #fdf6f6; font-size: 15px; line-height: 1.6; color: #2c2727; }
+@media (max-width: 899px) { .tanda { grid-template-columns: minmax(0, 1fr); } .msg { max-width: 92%; } }
 
-/* ---------- #model: diagram alur ---------- */
-#model .dg-frame { margin-top: var(--s-7); height: min(520px, calc(100svh - 380px)); min-height: 380px; border-radius: var(--r-lg); background: var(--g-alt); overflow: hidden; }
-@media (max-width: 639px) { #model .dg-frame { height: 440px; } #hukum .grid.fill { height: auto; flex: none; } #hukum .frame--photo { position: relative; aspect-ratio: 4 / 3; height: auto; min-height: 0; } .nav__actions { display: none; } }
+/* ---------- #alur: langkah + pratinjau PDF ---------- */
+.alur { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--gutter); align-items: center; }
+.alur__steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; counter-reset: lk; }
+.alur__steps li { position: relative; padding: 16px 0 16px 60px; counter-increment: lk; }
+.alur__steps li::before { content: counter(lk); position: absolute; left: 0; top: 14px; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; background: var(--p-action); color: #fff; font: 600 16px/1 var(--font-text); }
+.alur__steps li:not(:last-child)::after { content: ""; position: absolute; left: 19px; top: 58px; bottom: -14px; width: 2px; background: #ecd2d3; }
+.alur__steps h3 { font: 500 19px/1.35 var(--font-text); margin: 0; }
+.alur__steps p { margin: 4px 0 0; font-size: 15px; line-height: 1.55; color: #4a4545; }
+.kertas-wrap { background: #efe7e5; border-radius: 22px; padding: clamp(20px, 4vw, 48px); display: grid; place-items: center; }
+.kertas { width: min(100%, 440px); aspect-ratio: 210 / 297; background: #fff; border-radius: 4px; box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 30px 60px -30px rgb(60 10 15 / .45); padding: 0 28px 24px; font: 400 10.5px/1.45 var(--font-text); color: #1d1a1a; overflow: hidden; }
+.kertas p { margin: 0; }
+.kertas__pita { height: 8px; margin: 0 -28px 18px; background: #a8101a; }
+.kertas h4 { margin: 0; font: 700 14px/1.25 var(--font-text); letter-spacing: .01em; }
+.kertas__sub { margin: 4px 0 12px !important; color: #6a6262; }
+.kertas__judul { margin: 12px 0 6px !important; font: 600 11px/1.3 var(--font-text); color: #a8101a; text-transform: uppercase; letter-spacing: .04em; }
+.kertas dl { display: grid; grid-template-columns: 34% 1fr; gap: 3px 8px; margin: 0; }
+.kertas dt { color: #6a6262; } .kertas dd { margin: 0; }
+.kertas__kutip { padding: 8px 10px; border-left: 2px solid #a8101a; background: #faf5f4; }
+.kertas__status { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding: 7px 10px; border-radius: 6px; background: #fdf2e0; color: #7d4a00; font-weight: 600; }
+.kertas__bar { height: 5px; margin-top: 6px; border-radius: 9px; background: #eee; overflow: hidden; } .kertas__bar i { display: block; height: 100%; width: 65%; background: #1d1a1a; }
+.kertas__ttd { display: flex; justify-content: flex-end; margin-top: 16px; text-align: center; } .kertas__ttd div { width: 46%; } .kertas__ttd span { display: block; height: 30px; }
+@media (max-width: 899px) { .alur { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- #serahkan: pita merah ---------- */
+#serahkan .sec-head p { color: #f6d2d4; }
+.tujuan { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 3fr) minmax(0, 3fr); gap: var(--s-5); }
+.tujuan article { padding: 24px; border-radius: 16px; background: rgb(255 255 255 / .08); border: 1px solid rgb(255 255 255 / .2); }
+.tujuan article.utama { background: #fff; color: #1d1a1a; border-color: #fff; }
+.tujuan .label { display: inline-block; font: 500 12px/1 var(--font-text); letter-spacing: .04em; text-transform: uppercase; padding: 5px 8px; border-radius: 99px; background: rgb(255 255 255 / .16); color: #fff; }
+.tujuan .utama .label { background: #fbe5e5; color: #8c0d15; }
+.tujuan h3 { margin: 14px 0 6px; font: 500 22px/1.25 var(--font-display); letter-spacing: -0.01em; color: inherit; }
+.tujuan p { margin: 0; font-size: 15px; line-height: 1.6; color: #f6d2d4; }
+.tujuan .utama p { color: #4a4545; }
+.tujuan dl { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; margin: 14px 0 0; font-size: 15px; } .tujuan dt { color: #6a6262; } .tujuan dd { margin: 0; font-weight: 500; }
+.tujuan .utama .tujuan__kosong { margin-top: 14px; padding: 10px 12px; border-radius: 10px; background: #f7f3f2; font-size: 14px; color: #2c2727; }
+.aturan { margin: var(--s-6) 0 0; font-size: 14px; line-height: 1.6; color: #f6d2d4; max-width: 80ch; }
+.aturan a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 899px) { .tujuan { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- #privasi ---------- */
+.privasi { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--gutter); align-items: center; }
+.privasi__foto { border-radius: 20px; overflow: hidden; aspect-ratio: 4 / 3.4; }
+.privasi__foto img { width: 100%; height: 100%; object-fit: cover; object-position: 70% 50%; display: block; }
+.privasi h2 { margin-bottom: var(--s-5); }
+.data-rows { list-style: none; margin: 0; padding: 0; }
+.data-rows li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-top: 1px solid #ece6e5; font-size: 16px; line-height: 1.55; }
+.data-rows li:last-child { border-bottom: 1px solid #ece6e5; }
+.data-rows b { font-weight: 600; }
+.data-rows .ya { color: #17603b; } .data-rows .tidak { color: #a8101a; }
+@media (max-width: 899px) { .privasi { grid-template-columns: minmax(0, 1fr); } .data-rows li { grid-template-columns: minmax(0, 1fr); gap: 2px; } }
+
+/* ---------- #faq ---------- */
+.faq-wrap { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: var(--gutter); align-items: start; }
+.darurat { margin: var(--s-6) 0; padding: 18px 20px; border-radius: 14px; background: #fff; border: 1px solid #ecd2d3; }
+.darurat b { display: block; font-size: 17px; color: #a8101a; margin-bottom: 4px; }
+.darurat p { margin: 0; font-size: 15px; line-height: 1.6; color: #2c2727; }
+.darurat p + p { margin-top: 8px; }
+@media (max-width: 899px) { .faq-wrap { grid-template-columns: minmax(0, 1fr); } }
 CSS;
 
-
 kepala([
-    'judul'     => 'Cek Hatespeech: cek ujaran kebencian untuk teks berbahasa Indonesia',
-    'deskripsi' => 'Tempel komentar atau postingan, lalu model XLM-RoBERTa menilai skor ujaran kebencian dan bahasa kasar dalam hitungan detik.',
-    'momen'     => ['liquid-type'],
-    'diagram'   => true,
+    'judul'     => 'Cek Hatespeech: lapor perundungan untuk mahasiswa Telkom University Purwokerto',
+    'deskripsi' => 'Tempel pesan atau komentar yang menyerangmu, cek dengan AI, lalu unduh PDF laporan untuk diserahkan ke Satgas PPKPT Telkom University Purwokerto.',
     'css'       => $css,
     'kanonik'   => '/',
 ]);
@@ -102,217 +121,164 @@ navigasi('beranda');
 ?>
 <main id="top">
 
-  <!-- HERO (centred): pill, judul dengan tanda di dalamnya, dua tombol, lalu jendela antrean cek -->
-  <section class="hero hero--centred" data-enter aria-labelledby="hero-h">
-    <div class="wrap"><div class="hero-text">
-      <div class="hero__c">
-        <a class="pill" href="#model"><span>XLM-RoBERTa, F1 92,74%</span><span class="muted">Lihat modelnya</span></a>
-        <h1 id="hero-h" aria-label="Deteksi ujaran kebencian teks Indonesia"><span class="mark" data-mark="dots" aria-hidden="true"></span>Deteksi ujaran kebencian teks Indonesia</h1>
-        <p class="hero__lead">Tempel komentar hingga 2.000 karakter. Model menilai skor ujaran kebencian dan bahasa kasar secara terpisah.</p>
+  <!-- HERO (split): teks di kiri, foto mahasiswi yang membaca pesan di kanan -->
+  <section class="hero hero--split" data-enter aria-labelledby="hero-h">
+    <div class="wrap"><div class="hero-text grid hero__grid">
+      <div class="hero__text span-5">
+        <p class="hero__kicker"><span class="dot" aria-hidden="true"></span>Untuk mahasiswa Telkom University Purwokerto</p>
+        <h1 id="hero-h">Lapor perundungan di Telkom University Purwokerto</h1>
+        <p class="hero__lead">Tempel pesan atau komentar yang menyerangmu. AI menilai apakah isinya ujaran kebencian atau kata kasar, lalu kamu mengunduh PDF laporan untuk diserahkan ke <?= e($tujuan) ?>.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
-          <a class="btn btn--secondary" href="/dasar-hukum">Baca dasar hukum</a>
+          <a class="btn btn--primary" href="/lapor">Buat laporan<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--secondary" href="#tanda">Kenali tanda perundungan</a>
         </div>
+        <p class="hero__fakta"><span>Gratis, tanpa akun</span><span>Nama dan NIM tidak dikirim ke server</span><span>PDF A4 siap cetak</span></p>
       </div>
-      <div class="hero__window" data-fx="grain-gradient" data-fx-seed="11" role="img" aria-label="Antrean cek: kalimat tentang pendatang dari suatu suku dinilai indikasi kuat ujaran kebencian dengan skor 99,33 persen">
-        <div class="ly-piece hw" aria-hidden="true">
-          <div class="hw__bar"><span class="hw__dots"><i></i><i></i><i></i></span><span><b>Antrean cek</b> · 4 teks</span><span class="hw__sp"></span><span>RuangAman API</span></div>
-          <div class="hw__body">
-            <div class="hw__list">
-              <div class="hw__q">Cari teks</div>
-              <div class="hw__t is-on"><span>Semua pendatang dari suku itu pencuri…</span><em class="st st--kuat">Indikasi kuat</em></div>
-              <div class="hw__t"><span>Kaum mereka selalu bikin masalah di…</span><em class="st st--tinjau">Perlu ditinjau</em></div>
-              <div class="hw__t"><span>Anjing, macet parah lagi pagi ini</span><em class="st st--kasar">Bahasa kasar</em></div>
-              <div class="hw__t"><span>Terima kasih banyak atas bantuannya…</span><em class="st st--aman">Aman</em></div>
-            </div>
-            <div class="hw__convo" data-ly-steps="900">
-              <div class="hw__me">Semua pendatang dari suku itu pencuri, jangan kasih tempat</div>
-              <div class="hw__tool" data-step>XLM-RoBERTa membaca 9 kata</div>
-              <div class="hw__bot" data-step>Indikasi kuat ujaran kebencian. Skor 99,33%, bahasa kasar 0,27%.<small>Pasal 28 ayat (2) UU ITE</small></div>
-            </div>
-          </div>
+      <div class="hero__media span-6 start-7">
+        <img src="<?= e(urlFoto('hate-speech')) ?>" alt="Mahasiswi menunduk sambil membaca pesan di ponselnya" fetchpriority="high">
+        <div class="ly-float">
+          <div class="ly-float__row"><span class="ly-live">PDF laporan</span><span>1 halaman A4</span></div>
+          <div class="ly-float__title">Siap diserahkan ke <?= e($tujuan) ?></div>
         </div>
       </div>
     </div></div>
   </section>
 
-  <!-- CARA KERJA: tiga kartu langkah, masing-masing dengan jendela atau tangkapan layar aslinya -->
-  <section class="section bg-mist" id="cara-kerja" aria-labelledby="cara-h">
+  <!-- TANDA: contoh percakapan grup kelas dan lima tanda perundungan -->
+  <section class="doc-sec" id="tanda" aria-labelledby="tanda-h">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="cara-h">3 langkah deteksi, dari teks ke putusan</h2>
+      <div class="sec-head">
+        <h2 id="tanda-h">Tanda kamu sedang dirundung</h2>
+        <p>Perundungan sering dianggap bercanda oleh pelakunya. Kalau perlakuan ini membuatmu takut, malu atau enggan datang ke kampus, itu sudah cukup alasan untuk melapor.</p>
       </div>
-      <div class="grid langkah">
-        <article class="card m-nolift span-4">
-          <h3>1. Mengirim teks ke API model</h3>
-          <p>Server PHP di Vercel memeriksa panjang teks, lalu mengirimnya sebagai JSON ke RuangAman API.</p>
-          <div class="panel"><div class="pcw" role="img" aria-label="Permintaan POST ke RuangAman API berisi teks yang dicek">
-                <div class="hw__bar"><span class="hw__dots"><i></i><i></i><i></i></span><span><b>POST /predict</b></span><span class="hw__sp"></span><span>RuangAman API</span></div>
-                <pre class="pcw__code">{
-  <span class="k">"teks"</span>: <span class="s">"Semua pendatang dari suku itu pencuri, jangan kasih tempat"</span>
-}</pre>
-                <div class="pcw__rows"><div><span>Panjang teks</span><b>58 karakter</b></div><div><span>Batas</span><b>2.000 karakter</b></div><div><span>Batas tunggu</span><b>25 detik</b></div></div>
-              </div></div>
-        </article>
-        <article class="card m-nolift span-4">
-          <h3>2. Menilai 2 label dengan XLM-RoBERTa</h3>
-          <p>Model membaca seluruh kalimat dan memberi skor 0 sampai 1 untuk HATESPEECH dan ABUSIVE, masing-masing terpisah.</p>
-          <div class="panel panel--flush"><img class="langkah__img" src="<?= e(urlFoto('colab')) ?>" alt="Dokumentasi RuangAman API dengan endpoint GET / dan POST /predict" width="1280" height="720" loading="lazy" data-source="client" data-subject="dokumentasi API model"></div>
-        </article>
-        <article class="card m-nolift span-4">
-          <h3>3. Menentukan status dari ambang skor</h3>
-          <p>Skor 0,8 ke atas menjadi indikasi kuat, 0,5 sampai 0,8 perlu ditinjau, lalu kamus menyorot kata pemicunya.</p>
-          <div class="panel"><div class="pcw" role="img" aria-label="Jawaban API: skor HATESPEECH 0,9933, ABUSIVE 0,0027, status INDIKASI_KUAT">
-                <div class="hw__bar"><span class="hw__dots"><i></i><i></i><i></i></span><span><b>200 OK</b> · 0,9933</span><span class="hw__sp"></span><span>JSON</span></div>
-                <pre class="pcw__code">{
-  <span class="k">"skor"</span>: {
-    <span class="k">"HATESPEECH"</span>: <span class="n">0.9933</span>,
-    <span class="k">"ABUSIVE"</span>: <span class="n">0.0027</span>
-  },
-  <span class="k">"status"</span>: <span class="s">"INDIKASI_KUAT"</span>,
-  <span class="k">"prioritas"</span>: <span class="s">"Tinggi"</span>
-}</pre>
-              </div></div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- HASIL (dark-band, features-2x2): empat status, contoh nyata dari model -->
-  <section class="section g2 ground-inverse" id="hasil" aria-labelledby="hasil-h">
-    <div class="wrap">
-      <div class="group">
-        <div class="section-head">
-          <h2 id="hasil-h">4 status hasil deteksi. <span class="muted">Ditentukan dari dua skor yang dihitung model.</span></h2>
-        </div>
-        <div class="grid">
-          <article class="card card--row m-nolift span-6">
-            <h3>Menandai ujaran kebencian</h3>
-            <p>Skor kebencian 0,8 atau lebih: teks menyerang kelompok karena suku, agama, ras atau identitas lain.</p>
-            <div class="panel panel--flush">
-              <div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:420px;--ax:max(24px, 50% - 210px);--ay:40px;--ay-sm:20px">
-                <div class="ui ui-panel vd" role="img" aria-label="Contoh: Semua pendatang dari suku itu pencuri, jangan kasih tempat. Skor kebencian 99,33 persen.">
-                  <div class="vd__head"><span>Teks 1 dari 4</span><em class="st st--kuat">Indikasi kuat</em></div>
-                  <p class="vd__teks">Semua pendatang dari suku itu pencuri, jangan kasih tempat</p>
-                  <div class="vd__row vd__row--on"><span>Ujaran kebencian</span><b>99,33%</b><i style="--v:99.33%"></i></div>
-                  <div class="vd__row"><span>Bahasa kasar</span><b>0,27%</b><i style="--v:0.27%"></i></div>
-                  <p class="vd__ref">Kamus: pendatang, suku · Pasal 28 ayat (2) UU ITE</p>
-                </div>
-              </div></div>
-            </div>
-          </article>
-          <article class="card card--row m-nolift span-6">
-            <h3>Meminta tinjauan manusia</h3>
-            <p>Skor kebencian 0,5 sampai di bawah 0,8: model belum yakin, jadi keputusan diserahkan ke moderator.</p>
-            <div class="panel panel--flush">
-              <div class="stage stage--fade-br"><div class="at-corner" style="--ax:32px;--ay:40px;--w:440px;width:440px">
-                <div class="ui ui-panel vd" role="img" aria-label="Contoh: Kaum mereka selalu bikin masalah di kampung ini. Skor kebencian 65,21 persen.">
-                  <div class="vd__head"><span>Teks 2 dari 4</span><em class="st st--tinjau">Perlu ditinjau</em></div>
-                  <p class="vd__teks">Kaum mereka selalu bikin masalah di kampung ini</p>
-                  <div class="vd__row vd__row--on"><span>Ujaran kebencian</span><b>65,21%</b><i style="--v:65.21%"></i></div>
-                  <div class="vd__row"><span>Bahasa kasar</span><b>0,12%</b><i style="--v:0.12%"></i></div>
-                  <p class="vd__ref">Kamus: kaum, mereka · menunggu moderator</p>
-                </div>
-              </div></div>
-            </div>
-          </article>
-        </div>
-      </div>
-      <div class="grid">
-        <article class="card card--row m-nolift span-6">
-          <h3>Memisahkan bahasa kasar</h3>
-          <p>Skor kasar 0,8 atau lebih tetapi kebencian di bawah 0,5: makian yang tidak menyerang identitas.</p>
-          <div class="panel panel--flush">
-            <div class="stage stage--fade-b"><div class="at-right to-edge" style="--ax:32px;--ay:48px;--w:400px;width:400px">
-              <div class="ui ui-panel vd" role="img" aria-label="Contoh: Anjing, macet parah lagi pagi ini. Skor bahasa kasar 98,52 persen.">
-                <div class="vd__head"><span>Teks 3 dari 4</span><em class="st st--kasar">Bahasa kasar</em></div>
-                <p class="vd__teks">Anjing, macet parah lagi pagi ini</p>
-                <div class="vd__row"><span>Ujaran kebencian</span><b>7,48%</b><i style="--v:7.48%"></i></div>
-                <div class="vd__row vd__row--on"><span>Bahasa kasar</span><b>98,52%</b><i style="--v:98.52%"></i></div>
-                <p class="vd__ref">Kamus: anjing · tanpa sasaran kelompok</p>
-              </div>
-            </div></div>
+      <div class="tanda">
+        <div class="chat" role="img" aria-label="Contoh percakapan grup kelas: seorang mahasiswa dikucilkan dari kelompok, logatnya diejek, fotonya disebar dan ia diancam">
+          <div class="chat__bar"><span class="chat__ava" aria-hidden="true">IF</span><div><b>Grup Kelas IF-23-B</b><small>38 anggota</small></div></div>
+          <div class="chat__body" aria-hidden="true">
+            <p class="chat__info">Hari ini</p>
+            <div class="msg"><b>Raka</b>Kelompok 3 udah penuh ya. Dimas ga usah diajak, nanti nyusahin<time>20.14</time><span class="msg__tag">Pengucilan</span></div>
+            <div class="msg"><b>Sinta</b>wkwk setuju, ngomongnya ngapak banget pas presentasi, malu-maluin<time>20.15</time><span class="msg__tag">Ejekan logat</span></div>
+            <div class="msg msg--foto"><b>Raka</b><div class="msg__img">Foto Dimas saat presentasi</div>liat mukanya pas ditanya dosen<time>20.17</time><span class="msg__tag">Foto disebar</span></div>
+            <div class="msg"><b>Bayu</b>besok kalau dia masih nongol di lab, kita kerjain lagi<time>20.21</time><span class="msg__tag">Ancaman</span></div>
           </div>
-        </article>
-        <article class="card card--row m-nolift span-6">
-          <h3>Meloloskan teks yang aman</h3>
-          <p>Kedua skor di bawah ambang: teks tidak terindikasi ujaran kebencian maupun bahasa kasar.</p>
-          <div class="panel panel--flush">
-            <div class="stage stage--fade-b"><div class="at-rise fit" style="--fit-max:420px;--ax:max(24px, 50% - 210px);--ay:calc(100% - 196px);--ay-sm:24px">
-              <div class="ui ui-panel vd" role="img" aria-label="Contoh: Terima kasih banyak atas bantuannya, semoga hari kalian menyenangkan. Skor kebencian 0,17 persen.">
-                <div class="vd__head"><span>Teks 4 dari 4</span><em class="st st--aman">Tidak terindikasi</em></div>
-                <p class="vd__teks">Terima kasih banyak atas bantuannya, semoga hari kalian menyenangkan!</p>
-                <div class="vd__row vd__row--on"><span>Ujaran kebencian</span><b>0,17%</b><i style="--v:0.17%"></i></div>
-                <div class="vd__row"><span>Bahasa kasar</span><b>0,30%</b><i style="--v:0.30%"></i></div>
-                <p class="vd__ref">Kamus: tidak ada kata yang disorot</p>
-              </div>
-            </div></div>
-          </div>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- PERNYATAAN (liquid-type): satu kalimat besar dari Pasal 28 ayat (2) UU ITE -->
-  <section class="section" id="pernyataan" aria-labelledby="pernyataan-h">
-    <div class="wrap">
-      <div data-moment="liquid-type" class="section-head" style="max-width:none">
-        <h2 id="pernyataan-h" class="mo-lt__type">Hingga 6 tahun penjara</h2>
-        <p class="t-lead measure">Pasal 28 ayat (2) UU ITE mengancam penyebar kebencian berdasarkan suku, agama, ras, jenis kelamin atau disabilitas, dengan denda hingga Rp1 miliar.</p>
-        <p><a class="link" href="/dasar-hukum#pasal-28-2">Baca unsur Pasal 28 ayat (2)</a></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- HUKUM (split): pasal utama sebagai baris, foto palu hakim di kanan -->
-  <section class="section" id="hukum" style="--hm: 2" aria-labelledby="hukum-h">
-    <div class="wrap">
-      <div class="grid fill">
-        <div class="span-5 stack-6">
-          <h2 id="hukum-h">Pasal yang mengatur ujaran kebencian</h2>
-          <p class="t-lead">Empat aturan yang paling sering dipakai untuk ujaran kebencian di ruang digital, dengan ancaman terberatnya.</p>
-          <ul class="rows">
-            <li><span class="rows__name">UU ITE Pasal 28 ayat (2)</span><span class="rows__value">6 tahun, Rp1 miliar</span></li>
-            <li><span class="rows__name">UU No. 40 Tahun 2008 Pasal 16</span><span class="rows__value">5 tahun, Rp500 juta</span></li>
-            <li><span class="rows__name">KUHP Pasal 243</span><span class="rows__value">4 tahun, Rp200 juta</span></li>
-            <li><span class="rows__name">UU ITE Pasal 27A</span><span class="rows__value">2 tahun, Rp400 juta</span></li>
+        </div>
+        <div>
+          <ul class="tanda__list">
+            <li><span>1</span><div><h3>Dihina berulang di grup kelas atau angkatan</h3><p>Ejekan soal logat, fisik, nilai atau asal daerah yang terus diulang.</p></div></li>
+            <li><span>2</span><div><h3>Diserang karena suku, agama atau ras</h3><p>Kalimat yang merendahkan identitasmu termasuk ujaran kebencian.</p></div></li>
+            <li><span>3</span><div><h3>Sengaja dikucilkan</h3><p>Tidak diajak kelompok tugas, dikeluarkan dari grup atau disuruh menjauh.</p></div></li>
+            <li><span>4</span><div><h3>Foto atau data pribadimu disebar</h3><p>Diedit, dijadikan bahan tertawaan atau diunggah tanpa izin.</p></div></li>
+            <li><span>5</span><div><h3>Diancam lewat pesan atau langsung</h3><p>Ancaman untuk "dikerjain", dipukul atau dipermalukan.</p></div></li>
           </ul>
-          <p><a class="link" href="/dasar-hukum">Baca dasar hukum</a></p>
+          <p class="tanda__catatan">Satu kejadian yang berat tetap boleh dilaporkan. Kamu tidak harus menunggu sampai terjadi berulang kali.</p>
         </div>
-        <a class="frame frame--photo span-6 start-7" href="/dasar-hukum" aria-label="Baca dasar hukum lengkap">
-          <img class="frame__img" src="<?= e(urlFoto('hukum')) ?>" alt="Palu hakim di atas meja sidang dengan tumpukan buku" loading="lazy" data-source="library" data-subject="palu hakim di ruang sidang">
-        </a>
       </div>
     </div>
   </section>
 
-  <!-- MODEL: diagram alur, satu masukan, satu model, tiga keluaran -->
-  <section class="section" id="model" aria-labelledby="model-h">
+  <!-- ALUR: empat langkah dan pratinjau PDF yang dihasilkan -->
+  <section class="doc-sec ground-surface" id="alur" aria-labelledby="alur-h">
     <div class="wrap">
-      <div class="section-head">
-        <h2 id="model-h">Model deteksi XLM-RoBERTa. <span class="muted">Dilatih ulang untuk ujaran kebencian dan bahasa kasar, 10 bahasa.</span></h2>
-      </div>
-      <div class="frame dg-frame">
-        <div class="dg" data-diagram data-dg-still><script type="application/json">{"layout": "lanes", "alt": "Teks dari web Cek Hatespeech masuk ke model XLM-RoBERTa, yang mengeluarkan skor ujaran kebencian, skor bahasa kasar dan status.", "input": {"label": "Teks", "icon": "php", "sub": "2.000 karakter"}, "pulse": "none", "core": {"label": "XLM-RoBERTa", "icon": "hugging-face"}, "lanes": [{"label": "HATESPEECH", "icon": "ui:shield-alert", "done": true, "sub": "0,9933"}, {"label": "ABUSIVE", "icon": "ui:message-square", "done": true, "sub": "0,0027"}, {"label": "Status", "icon": "ui:check", "done": true, "sub": "Indikasi kuat"}]}</script></div>
+      <div class="alur">
+        <div>
+          <h2 id="alur-h" style="margin-bottom: var(--s-6)">4 langkah dari bukti ke laporan</h2>
+          <ol class="alur__steps">
+            <li><h3>Isi data dirimu</h3><p>Nama, NIM, program studi dan kontak yang bisa dihubungi Satgas.</p></li>
+            <li><h3>Ceritakan kejadiannya</h3><p>Kapan, di mana atau lewat aplikasi apa, dan siapa yang terlibat kalau kamu tahu.</p></li>
+            <li><h3>Tempel bukti, AI memeriksa</h3><p>Salin pesan atau komentarnya. Model XLM-RoBERTa memberi skor ujaran kebencian dan kata kasar. Tangkapan layar bisa dilampirkan.</p></li>
+            <li><h3>Unduh PDF, serahkan ke kampus</h3><p>Cetak atau kirim PDF ke <?= e($tujuan) ?>. Simpan juga bukti aslinya.</p></li>
+          </ol>
+          <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/lapor">Buat laporan<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+        </div>
+        <div class="kertas-wrap">
+          <div class="kertas" role="img" aria-label="Contoh halaman PDF laporan dugaan perundungan berisi data pelapor, bukti dan hasil pemeriksaan AI">
+            <div class="kertas__pita"></div>
+            <h4>LAPORAN DUGAAN PERUNDUNGAN</h4>
+            <p class="kertas__sub">Kepada: <?= e($tujuan) ?><br>No. LP-20261111-2014</p>
+            <p class="kertas__judul">1. Data pelapor</p>
+            <dl><dt>Nama</dt><dd>Dimas Pratama</dd><dt>NIM</dt><dd>23111020xx</dd><dt>Program studi</dt><dd>S1 Teknik Informatika</dd><dt>Melapor sebagai</dt><dd>Korban</dd></dl>
+            <p class="kertas__judul">2. Kejadian</p>
+            <dl><dt>Tanggal</dt><dd>10 November 2026</dd><dt>Tempat</dt><dd>Grup WhatsApp kelas</dd></dl>
+            <p class="kertas__judul">3. Bukti dan pemeriksaan AI</p>
+            <p class="kertas__kutip">"Kaum mereka selalu bikin masalah di kampung ini"</p>
+            <div class="kertas__status"><span>Perlu ditinjau manusia</span><span>65,21%</span></div>
+            <div class="kertas__bar"><i></i></div>
+            <div class="kertas__ttd"><div>Purwokerto, 11 November 2026<span></span>( Dimas Pratama )</div></div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- FAQ (split): pertanyaan tentang hasil, jawaban terbuka -->
-  <section class="section bg-band" id="faq" aria-labelledby="faq-h">
+  <!-- SERAHKAN: tujuan laporan di kampus, di pita merah -->
+  <section class="doc-sec ground-inverse" id="serahkan" aria-labelledby="serahkan-h">
     <div class="wrap">
-      <div class="grid grid--top">
-        <div class="span-5 stack-4">
-          <h2 id="faq-h">FAQ hasil deteksi</h2>
-          <p class="muted">Yang paling sering ditanyakan saat mencoba Cek Hatespeech.</p>
-          <p class="btn-row"><a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+      <div class="sec-head">
+        <h2 id="serahkan-h">Ke mana PDF diserahkan</h2>
+        <p>Web ini tidak mengirim laporan secara otomatis. Kamu yang menyerahkan PDF, jadi kamu tetap memegang kendali atas laporanmu.</p>
+      </div>
+      <div class="tujuan">
+        <article class="utama">
+          <span class="label">Tujuan utama</span>
+          <h3><?= e($tujuan) ?></h3>
+          <p><?= e(KAMPUS['tujuan_lengkap']) ?> menerima dan menangani laporan kekerasan di kampus, termasuk perundungan.</p>
+          <?php if ($kontak): ?>
+            <dl><?php foreach ($kontak as $k => $v): ?><dt><?= e($k) ?></dt><dd><?= e($v) ?></dd><?php endforeach; ?></dl>
+          <?php else: ?>
+            <p class="tujuan__kosong">Tanyakan kontak resmi Satgas ke bagian kemahasiswaan atau lewat akun resmi kampus.</p>
+          <?php endif; ?>
+        </article>
+        <article>
+          <span class="label">Atau</span>
+          <h3>Dosen wali atau Kaprodi</h3>
+          <p>Kalau kamu belum siap ke Satgas, dosen wali bisa mendampingimu melapor.</p>
+        </article>
+        <article>
+          <span class="label">Pendampingan</span>
+          <h3>Layanan konseling</h3>
+          <p>Untuk bercerita dan menenangkan diri, sebelum atau sesudah melapor.</p>
+        </article>
+      </div>
+      <p class="aturan">Kampus wajib mencegah dan menangani kekerasan, termasuk perundungan, menurut Permendikbudristek No. 55 Tahun 2024 tentang Pencegahan dan Penanganan Kekerasan di Lingkungan Perguruan Tinggi. Penghinaan berdasarkan suku, agama atau ras di internet juga diatur UU ITE. <a href="/dasar-hukum">Baca dasar hukumnya</a></p>
+    </div>
+  </section>
+
+  <!-- PRIVASI: apa yang dikirim dan tidak -->
+  <section class="doc-sec" id="privasi" aria-labelledby="privasi-h">
+    <div class="wrap">
+      <div class="privasi">
+        <div class="privasi__foto"><img src="<?= e(urlFoto('hero')) ?>" alt="Tangan memegang ponsel yang menampilkan media sosial" loading="lazy"></div>
+        <div>
+          <h2 id="privasi-h">Nama dan NIM tetap di perangkatmu</h2>
+          <ul class="data-rows">
+            <li><b class="ya">Dikirim</b><span>Hanya teks bukti, ke server model AI untuk dinilai. Teks tidak disimpan.</span></li>
+            <li><b class="tidak">Tidak dikirim</b><span>Nama, NIM, kontak, kronologi dan tangkapan layar. Semuanya diolah di browsermu.</span></li>
+            <li><b>Disimpan</b><span>Tidak ada. PDF dibuat langsung di perangkatmu. Tutup tab dan isian ikut hilang.</span></li>
+          </ul>
         </div>
-        <div class="faq span-6 start-7">
-          <div class="faq__item"><h3>Apakah hasil deteksi selalu benar?</h3><p>Tidak. Kalimat kritik "Menurut saya kebijakan ini kurang tepat karena memberatkan rakyat kecil" mendapat skor 83,02% dan ditandai indikasi kuat.</p></div>
-          <div class="faq__item"><h3>Kenapa skor kebencian dan kasar bisa sama-sama tinggi?</h3><p>Model menilai tiap label terpisah. "Kerja apaan sih ini, tolol banget hasilnya" mendapat 99,08% kebencian dan 99,85% kasar.</p></div>
-          <div class="faq__item"><h3>Apakah teks saya disimpan saat deteksi?</h3><p>Aplikasi web tidak menyimpan teks. Teks dikirim ke server model untuk dinilai, lalu putusannya ditampilkan.</p></div>
-          <div class="faq__item"><h3>Bahasa apa saja yang dibaca model deteksi?</h3><p>Indonesia, Melayu, Jawa, Sunda, Madura, Minangkabau, Banjar, Bugis, Aceh dan Inggris.</p></div>
-          <div class="faq__item"><h3>Bolehkah hasil deteksi menjadi bukti hukum?</h3><p>Tidak. Hanya aparat penegak hukum dan pengadilan yang menilai apakah sebuah ujaran memenuhi unsur pasal.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ: pertanyaan sebelum melapor, dengan nomor darurat -->
+  <section class="doc-sec ground-surface" id="faq" aria-labelledby="faq-h">
+    <div class="wrap">
+      <div class="faq-wrap">
+        <div>
+          <h2 id="faq-h">Pertanyaan sebelum melapor</h2>
+          <div class="darurat">
+            <b>Dalam bahaya sekarang?</b>
+            <p>Hubungi 112 atau minta tolong orang terdekat. Jangan tunggu sampai laporan selesai.</p>
+            <p>Kalau pikiranmu terasa sangat berat, hubungi layanan kesehatan jiwa 119 ekstensi 8 atau orang yang kamu percaya.</p>
+          </div>
+          <p class="btn-row"><a class="btn btn--primary" href="/lapor">Buat laporan<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+        </div>
+        <div class="faq">
+          <div class="faq__item"><h3>Apakah laporanku langsung terkirim ke kampus?</h3><p>Tidak. Web ini membuat PDF. Kamu yang menyerahkannya ke <?= e($tujuan) ?>, langsung atau lewat kanal resmi mereka.</p></div>
+          <div class="faq__item"><h3>Bagaimana kalau AI bilang tidak terindikasi?</h3><p>Kamu tetap boleh melapor. AI hanya menilai teks, sedangkan perundungan juga bisa berupa pengucilan, ancaman langsung atau kekerasan fisik.</p></div>
+          <div class="faq__item"><h3>Bolehkah melapor untuk teman?</h3><p>Boleh. Pilih "Saksi" di formulir, isi data dirimu, lalu ceritakan apa yang kamu lihat.</p></div>
+          <div class="faq__item"><h3>Bukti apa yang sebaiknya kusimpan?</h3><p>Tangkapan layar utuh yang memperlihatkan nama akun, isi pesan dan tanggal. Jangan hapus percakapan aslinya.</p></div>
+          <div class="faq__item"><h3>Apakah identitasku akan dirahasiakan?</h3><p>Sampaikan ke Satgas kalau kamu ingin identitasmu dijaga. Web ini sendiri tidak menyimpan data apa pun.</p></div>
         </div>
       </div>
     </div>
@@ -320,4 +286,4 @@ navigasi('beranda');
 
 </main>
 <?php
-penutup(['diagram' => true]);
+penutup();
