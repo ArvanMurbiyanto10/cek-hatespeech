@@ -1,0 +1,6 @@
+# File yang tidak perlu ikut di-deploy ke Vercel
+hf-space/
+*.ipynb
+README.md
+.claude/
+.taste-skill/

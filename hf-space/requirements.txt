@@ -1,0 +1,8 @@
+# PyTorch versi CPU (lebih kecil; Space gratis tidak memakai GPU)
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
+transformers
+sentencepiece
+protobuf
+fastapi
+uvicorn

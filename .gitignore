@@ -5,7 +5,18 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
+# Notebook Colab (bisa berisi token) - jangan di-push
+*.ipynb
+.ipynb_checkpoints/
+
 # Log & file sementara
 *.log
 *.tmp
 _preview_tmp.html
+
+# Python
+__pycache__/
+
+# Skill Claude Code pihak ketiga (dipasang lokal) & folder kerja taste-skill
+.claude/skills/
+.taste-skill/
