@@ -441,7 +441,7 @@ function inisial(string $nama): string
 /* ============================ Router halaman ============================ */
 
 $jalur = rtrim((string)(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/'), '/');
-$daftarHalaman = ['' => 'beranda', '/dasar-hukum' => 'dasar-hukum', '/tentang' => 'tentang', '/kredit' => 'kredit'];
+$daftarHalaman = ['' => 'beranda', '/cek' => 'cek', '/dasar-hukum' => 'dasar-hukum', '/tentang' => 'tentang', '/kredit' => 'kredit'];
 $halaman = $daftarHalaman[$jalur] ?? null;
 if ($halaman === null) {
     http_response_code(404);

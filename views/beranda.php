@@ -8,14 +8,8 @@
  *       effect grain-gradient (bingkai hero) · card grounds: tidak ada yang cocok (slot dilepas) ·
  *       grounds: #cara-kerja bg-mist, #faq bg-band
  * moments: liquid-type (#pernyataan: ancaman pidana Pasal 28 ayat (2) sebagai satu kalimat besar)
- * screens @1440: hero 1 · cek 1 · cara-kerja 2 · hasil 2 · pernyataan 1 · hukum 1 · model 1 · faq 1 · closing 1
+ * screens @1440: hero 1 · cara-kerja 2 · hasil 2 · pernyataan 1 · hukum 1 · model 1 · faq 1 · closing 1
  */
-
-$contoh = [
-    'Netral'    => 'Terima kasih banyak atas bantuannya, semoga hari kalian menyenangkan!',
-    'Kasar'     => 'Anjing, macet parah lagi pagi ini',
-    'Kebencian' => 'Semua pendatang dari suku itu pencuri, jangan kasih tempat',
-];
 
 $css = <<<'CSS'
 /* ---------- hero: jendela antrean cek di bingkai bercahaya (page CSS di dalam visual) ---------- */
@@ -49,62 +43,6 @@ $css = <<<'CSS'
 .st--kuat { background: #fbe6e3; color: #a3271b; } .st--tinjau { background: #fdf0dc; color: #7d4a00; }
 .st--kasar { background: #e9eef5; color: #2e4462; } .st--aman { background: #e1f5e8; color: #17603b; }
 @media (max-width: 639px) { .hw__body { grid-template-columns: 1fr; min-height: 268px; } .hw__list, .hw__tool { display: none; } .hw__bar .hw__sp ~ span { display: none; } .hw__bot small { display: none; } }
-
-/* ---------- #cek: jendela aplikasi (resep app-frame) berisi form asli ---------- */
-.app.ui { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); margin-top: var(--s-7); background: var(--u-bg); border: 1px solid var(--u-border); border-radius: var(--u-r); box-shadow: var(--u-shadow); }
-.app > .app__pane { position: relative; min-width: 0; min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
-.app > .app__pane + .app__pane { border-left: 1px solid var(--u-line); }
-.cek-bar { display: flex; align-items: center; gap: 10px; flex: none; height: 44px; padding: 0 18px; border-bottom: 1px solid var(--u-line); font: 400 13px/1 var(--font-text); color: var(--muted); }
-.cek-bar b { font-weight: 500; color: var(--ink); } .cek-bar .hw__sp { flex: 1; }
-.cek-form { display: grid; gap: 12px; padding: 20px 20px 24px; align-content: start; }
-.cek-form label { font: 500 14px/1.3 var(--font-text); color: var(--ink); }
-.cek-form textarea { width: 100%; min-height: 188px; resize: vertical; padding: 14px 16px; border: 1px solid rgb(35 35 35 / .18); border-radius: 12px; background: #fff; color: var(--ink); font: 400 16px/1.55 var(--font-text); }
-.cek-form textarea:focus-visible { outline: 2px solid var(--action); outline-offset: 2px; }
-.cek-meta { display: flex; justify-content: space-between; gap: 12px; font: 400 13px/1.4 var(--font-text); color: var(--muted); }
-.cek-contoh { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
-.cek-contoh span { font: 400 13px/1 var(--font-text); color: #4a4a4a; }
-.cek-contoh button { min-height: 44px; padding: 0 4px; border: 0; background: none; color: var(--ink); font: 500 14px/1 var(--font-text); text-decoration: underline; text-decoration-color: rgb(35 35 35 / .35); text-underline-offset: 4px; cursor: pointer; }
-.cek-contoh button:hover { text-decoration-color: var(--ink); }
-.cek-form .btn-row { margin-top: 4px; }
-.cek-out { padding: 20px 24px 24px; overflow-y: auto; display: grid; gap: 16px; align-content: start; }
-.cek-label { margin: 0; font: 500 13px/1.3 var(--font-text); color: var(--muted); }
-.cek-panduan { list-style: none; margin: 0; padding: 0; display: grid; }
-.cek-panduan li { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 12px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--u-line); font: 400 16px/1.5 var(--font-text); color: var(--ink); }
-.cek-panduan li span { color: var(--ink); }
-.cek-note { margin: 0; font: 400 16px/1.6 var(--font-text); color: var(--ink); max-width: 52ch; }
-.cek-vonis { display: grid; grid-template-columns: 40px minmax(0, 1fr); gap: 14px; align-items: start; padding: 16px 18px; border-radius: 14px; background: #f4f4f4; }
-.cek-vonis--hate { background: #fbe9e6; } .cek-vonis--tinjau { background: #fdf2e0; } .cek-vonis--abusive { background: #ebf0f6; } .cek-vonis--aman { background: #e4f6ea; }
-.cek-ikon { width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; font: 600 18px/1 var(--font-text); color: #fff; background: #232323; }
-.cek-vonis--hate .cek-ikon { background: #a3271b; } .cek-vonis--tinjau .cek-ikon { background: #8a5300; } .cek-vonis--abusive .cek-ikon { background: #2e4462; } .cek-vonis--aman .cek-ikon { background: #17603b; }
-.cek-judul { margin: 0; font: 500 20px/1.3 var(--font-text); color: var(--ink); }
-.cek-sub { margin: 4px 0 0; font: 400 16px/1.5 var(--font-text); color: var(--ink); }
-.cek-skor { display: grid; gap: 12px; }
-.cek-skor div { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 6px 12px; font: 400 16px/1.4 var(--font-text); color: var(--ink); }
-.cek-skor b { font-weight: 500; font-variant-numeric: tabular-nums; }
-.cek-skor i { grid-column: 1 / -1; display: block; height: 8px; border-radius: 99px; background: #ececec; overflow: hidden; }
-.cek-skor i::after { content: ""; display: block; height: 100%; width: var(--v); border-radius: inherit; background: var(--ink); }
-.cek-fakta { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0; }
-.cek-fakta div { padding: 12px 14px; border: 1px solid var(--u-line); border-radius: 12px; }
-.cek-fakta dt { font: 500 13px/1.3 var(--font-text); color: var(--muted); } .cek-fakta dd { margin: 4px 0 0; font: 500 16px/1.35 var(--font-text); color: var(--ink); }
-.cek-teks { margin: 0; padding: 14px 16px; border-radius: 12px; background: #f6f6f6; font: 400 16px/1.6 var(--font-text); color: var(--ink); white-space: pre-wrap; overflow-wrap: anywhere; }
-.cek-teks mark { padding: 1px 3px; border-radius: 4px; font-weight: 500; }
-.hl-hate { background: #fbe6e3; color: #8f2016; box-shadow: inset 0 -2px 0 #a3271b; }
-.hl-threat { background: #a3271b; color: #fff; }
-.hl-abuse { background: #fdf0dc; color: #6e4100; box-shadow: inset 0 -2px 0 #8a5300; }
-.hl-target { background: #e9eef5; color: #233a58; }
-.cek-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.cek-tags span { padding: 4px 10px; border: 1px solid var(--u-line); border-radius: 99px; font: 400 13px/1.5 var(--font-text); color: var(--ink); }
-.cek-galat { margin: 0; padding: 14px 16px; border-radius: 12px; background: #fbe9e6; color: #8f2016; font: 500 16px/1.5 var(--font-text); }
-@media (max-width: 1023px) {
-  .app.ui { grid-template-columns: minmax(0, 1fr); }
-  .app > .app__pane + .app__pane { border-left: 0; border-top: 1px solid var(--u-line); }
-  #cek .app > .app__pane, #cek .cek-out { overflow: visible; min-height: auto; }
-}
-@media (max-width: 639px) {
-  .cek-panduan li { grid-template-columns: minmax(0, 1fr); gap: 2px; }
-  .cek-fakta { grid-template-columns: minmax(0, 1fr); }
-  .cek-form, .cek-out { padding: 16px; }
-}
 
 /* ---------- #cara-kerja: jendela yang digambar untuk tiap langkah ---------- */
 .pcw { width: 100%; height: 100%; background: #fff; color: #1e1f21; border-radius: 14px; overflow: hidden; font: 400 14px/1.5 var(--font-text); box-shadow: 0 0 0 1px rgb(0 0 0 / .08), 0 24px 56px -30px rgb(0 0 0 / .4); }
@@ -151,21 +89,6 @@ section#pernyataan { display: grid; align-content: center; }
 @media (max-width: 639px) { #model .dg-frame { height: 440px; } #hukum .grid.fill { height: auto; flex: none; } #hukum .frame--photo { position: relative; aspect-ratio: 4 / 3; height: auto; min-height: 0; } .nav__actions { display: none; } }
 CSS;
 
-$js = <<<'JS'
-(function () {
-  var f = document.getElementById('form-cek'); if (!f) return;
-  var t = document.getElementById('teks'), n = document.getElementById('hitung'), b = document.getElementById('tombol-cek');
-  var maks = +t.getAttribute('maxlength');
-  function hitung() { n.textContent = t.value.length.toLocaleString('id-ID') + ' / ' + maks.toLocaleString('id-ID') + ' karakter'; }
-  t.addEventListener('input', hitung); hitung();
-  document.querySelectorAll('[data-contoh]').forEach(function (c) {
-    c.addEventListener('click', function () { t.value = c.getAttribute('data-contoh'); hitung(); t.focus(); });
-  });
-  document.getElementById('tombol-hapus').addEventListener('click', function () { t.value = ''; hitung(); t.focus(); });
-  t.addEventListener('keydown', function (e) { if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') f.requestSubmit(); });
-  f.addEventListener('submit', function () { b.setAttribute('aria-busy', 'true'); b.firstChild.nodeValue = 'Sedang dicek '; });
-})();
-JS;
 
 kepala([
     'judul'     => 'Cek Hatespeech: cek ujaran kebencian untuk teks berbahasa Indonesia',
@@ -175,7 +98,7 @@ kepala([
     'css'       => $css,
     'kanonik'   => '/',
 ]);
-navigasi();
+navigasi('beranda');
 ?>
 <main id="top">
 
@@ -187,7 +110,7 @@ navigasi();
         <h1 id="hero-h" aria-label="Deteksi ujaran kebencian teks Indonesia"><span class="mark" data-mark="dots" aria-hidden="true"></span>Deteksi ujaran kebencian teks Indonesia</h1>
         <p class="hero__lead">Tempel komentar hingga 2.000 karakter. Model menilai skor ujaran kebencian dan bahasa kasar secara terpisah.</p>
         <div class="btn-row">
-          <a class="btn btn--primary" href="#cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+          <a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
           <a class="btn btn--secondary" href="/dasar-hukum">Baca dasar hukum</a>
         </div>
       </div>
@@ -211,76 +134,6 @@ navigasi();
         </div>
       </div>
     </div></div>
-  </section>
-
-  <!-- CEK (app-frame): form asli di kiri, putusan model di kanan, satu jendela -->
-  <section class="section" id="cek" style="--h: 1; --hm: 2" aria-labelledby="cek-h">
-    <div class="wrap">
-      <div class="grid">
-        <h2 id="cek-h" class="span-5">Cek ujaran kebencian di teks Anda</h2>
-        <p class="span-6 start-7 muted">Tulis atau tempel teks, tekan Cek teks, lalu baca putusannya: status, dua skor dari model dan kata yang disorot kamus bantu. <a class="link" href="#hasil">Lihat arti tiap status</a></p>
-      </div>
-      <div class="ui ui-app app">
-        <div class="app__pane app__pane--list">
-          <div class="cek-bar"><span class="hw__dots"><i></i><i></i><i></i></span><b>Teks</b><span class="hw__sp"></span><span>Maks. 2.000 karakter</span></div>
-          <form class="cek-form" id="form-cek" method="post" action="/#cek" autocomplete="off">
-            <label for="teks">Teks yang dicek</label>
-            <textarea id="teks" name="teks" maxlength="<?= MAKS_KARAKTER ?>" required><?= e($teks) ?></textarea>
-            <div class="cek-meta"><span id="hitung" aria-live="polite">0 / 2.000 karakter</span><span>Ctrl + Enter untuk cek</span></div>
-            <div class="cek-contoh"><span>Contoh:</span>
-              <?php foreach ($contoh as $nama => $kalimat): ?>
-                <button type="button" data-contoh="<?= e($kalimat) ?>"><?= e($nama) ?></button>
-              <?php endforeach; ?>
-            </div>
-            <div class="btn-row">
-              <button class="btn btn--primary" type="submit" id="tombol-cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></button>
-              <button class="btn btn--secondary" type="button" id="tombol-hapus">Hapus teks</button>
-            </div>
-          </form>
-        </div>
-        <div class="app__pane app__pane--open" aria-live="polite">
-          <div class="cek-bar"><b>Putusan</b><span class="hw__sp"></span><span>nahiar/hatespeech-abusive-xlm-roberta-v1</span></div>
-          <div class="cek-out" id="hasil-cek">
-            <?php if ($galat !== ''): ?>
-              <p class="cek-galat" role="alert"><?= e($galat) ?></p>
-            <?php endif; ?>
-            <?php if ($hasil !== null): $info = $infoLabel[$hasil['label']]; ?>
-              <div class="cek-vonis cek-vonis--<?= e($hasil['label']) ?>">
-                <span class="cek-ikon" aria-hidden="true"><?= $info['ikon'] ?></span>
-                <div><p class="cek-judul"><?= e($info['judul']) ?></p><?php if ($hasil['penjelasan'] !== ''): ?><p class="cek-sub"><?= e($hasil['penjelasan']) ?></p><?php endif; ?></div>
-              </div>
-              <div class="cek-skor">
-                <div><span>Skor ujaran kebencian</span><b><?= persen($hasil['hs']) ?></b><i style="--v: <?= round($hasil['hs'] * 100, 2) ?>%"></i></div>
-                <div><span>Skor bahasa kasar</span><b><?= persen($hasil['ab']) ?></b><i style="--v: <?= round($hasil['ab'] * 100, 2) ?>%"></i></div>
-              </div>
-              <dl class="cek-fakta">
-                <div><dt>Sasaran (kamus)</dt><dd><?= e($hasil['target']) ?></dd></div>
-                <div><dt>Kategori (kamus)</dt><dd><?= e($hasil['kategori'] ? implode(', ', $hasil['kategori']) : '-') ?></dd></div>
-                <div><dt>Tingkat</dt><dd><?= e($hasil['tingkat']) ?></dd></div>
-              </dl>
-              <p class="cek-label">Teks yang dicek</p>
-              <div class="cek-teks"><?= $hasil['html'] ?></div>
-              <?php if ($hasil['temuan']): ?>
-                <div class="cek-tags">
-                  <?php foreach ($hasil['temuan'] as $t): ?>
-                    <span><b><?= e($t['kata']) ?></b> · <?= e($namaTipe[$t['tipe']]) ?></span>
-                  <?php endforeach; ?>
-                </div>
-              <?php endif; ?>
-            <?php elseif ($galat === ''): ?>
-              <p class="cek-label">Status yang bisa muncul</p>
-              <ul class="cek-panduan">
-                <li><em class="st st--kuat">Indikasi kuat</em><span>Skor ujaran kebencian 0,8 atau lebih.</span></li>
-                <li><em class="st st--tinjau">Perlu ditinjau</em><span>Skor ujaran kebencian 0,5 sampai di bawah 0,8.</span></li>
-                <li><em class="st st--kasar">Bahasa kasar</em><span>Skor bahasa kasar 0,8 atau lebih, kebencian di bawah 0,5.</span></li>
-                <li><em class="st st--aman">Tidak terindikasi</em><span>Kedua skor di bawah ambang batas.</span></li>
-              </ul>
-              <p class="cek-note">Putusan muncul di panel ini dalam beberapa detik setelah Anda menekan Cek teks.</p>
-            <?php endif; ?>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <!-- CARA KERJA: tiga kartu langkah, masing-masing dengan jendela atau tangkapan layar aslinya -->
@@ -452,7 +305,7 @@ navigasi();
         <div class="span-5 stack-4">
           <h2 id="faq-h">FAQ hasil deteksi</h2>
           <p class="muted">Yang paling sering ditanyakan saat mencoba Cek Hatespeech.</p>
-          <p class="btn-row"><a class="btn btn--primary" href="#cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+          <p class="btn-row"><a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
         </div>
         <div class="faq span-6 start-7">
           <div class="faq__item"><h3>Apakah hasil deteksi selalu benar?</h3><p>Tidak. Kalimat kritik "Menurut saya kebijakan ini kurang tepat karena memberatkan rakyat kecil" mendapat skor 83,02% dan ditandai indikasi kuat.</p></div>
@@ -467,4 +320,4 @@ navigasi();
 
 </main>
 <?php
-penutup(['diagram' => true, 'js' => $js]);
+penutup(['diagram' => true]);

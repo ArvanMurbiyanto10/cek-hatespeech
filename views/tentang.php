@@ -52,7 +52,7 @@ navigasi('tentang');
         <div class="span-6">
           <h1 id="tt-h">Tentang aplikasi Cek Hatespeech</h1>
           <p class="t-lead">Cek Hatespeech adalah aplikasi web yang mendeteksi ujaran kebencian dan bahasa kasar pada teks berbahasa Indonesia, dibuat sebagai tugas akhir di Telkom University Purwokerto.</p>
-          <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/#cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+          <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
         </div>
         <div class="frame frame--photo doc-foto span-6 start-7">
           <img class="frame__img" src="<?= e(urlFoto('tentang')) ?>" alt="Empat orang berdiri sambil membaca layar ponsel masing-masing" fetchpriority="high" data-source="library" data-subject="orang memakai media sosial">

@@ -88,7 +88,7 @@ html main section:not(.ground-inverse) :is(p.muted, .t-lead) { color: #4a4a4a; }
 <?php
 }
 
-/** Bar navigasi tetap (nav-centre). $aktif: 'dasar-hukum' | 'tentang' | '' */
+/** Bar navigasi tetap (nav-centre): Beranda, Tentang, Cek teks. $aktif: 'beranda' | 'tentang' | 'cek' | '' */
 function navigasi(string $aktif = ''): void
 {
     $cur = fn(string $h) => $aktif === $h ? ' aria-current="page"' : '';
@@ -98,37 +98,12 @@ function navigasi(string $aktif = ''): void
     <a class="skip-link" href="#top">Lewati ke isi</a>
     <a class="nav__logo" href="/"><span class="mark" data-mark="dots" aria-hidden="true"></span>Cek Hatespeech</a>
     <nav class="nav__links" aria-label="Utama">
-      <div class="nav__item"><a class="nav__link" href="/#hasil">Hasil</a></div>
-      <div class="nav__item"><a class="nav__link" href="/#model">Model</a></div>
-      <div class="nav__item">
-        <a class="nav__link" href="/dasar-hukum"<?= $cur('dasar-hukum') ?>>Hukum <svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5l3 3 3-3" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
-        <div class="nav__menu">
-          <div class="wrap grid">
-            <div class="menu-col span-3">
-              <p class="t-label">UU ITE</p>
-              <a href="/dasar-hukum#pasal-28-2">Pasal 28 ayat (2)<span>Kebencian berdasarkan identitas</span></a>
-              <a href="/dasar-hukum#pasal-27a">Pasal 27A<span>Menyerang nama baik orang</span></a>
-              <a href="/dasar-hukum#pasal-29">Pasal 29<span>Ancaman kekerasan pribadi</span></a>
-            </div>
-            <div class="menu-col span-3">
-              <p class="t-label">KUHP dan lainnya</p>
-              <a href="/dasar-hukum#kuhp">KUHP Pasal 242, 243, 300<span>Permusuhan terhadap golongan</span></a>
-              <a href="/dasar-hukum#uu-40-2008">UU No. 40 Tahun 2008<span>Diskriminasi ras dan etnis</span></a>
-              <a href="/dasar-hukum#ringkasan">Ringkasan pidana<span>Semua ancaman dalam satu tabel</span></a>
-            </div>
-            <a class="menu-card span-3 start-10" href="/dasar-hukum">
-              <div class="panel"><img class="frame__img" src="<?= e(urlFoto('hukum')) ?>" alt="Palu hakim di atas meja sidang dengan tumpukan buku"></div>
-              <span class="t-card">Dasar hukum lengkap</span>
-              <span class="t-small muted">Unsur dan ancaman tiap pasal</span>
-            </a>
-          </div>
-        </div>
-      </div>
+      <div class="nav__item"><a class="nav__link" href="/"<?= $cur('beranda') ?>>Beranda</a></div>
       <div class="nav__item"><a class="nav__link" href="/tentang"<?= $cur('tentang') ?>>Tentang</a></div>
-      <div class="nav__item"><a class="nav__link" href="/#faq">FAQ</a></div>
+      <div class="nav__item"><a class="nav__link" href="/cek"<?= $cur('cek') ?>>Cek teks</a></div>
     </nav>
     <div class="nav__actions">
-      <a class="btn btn--primary" href="/#cek">Cek teks</a>
+      <a class="btn btn--primary" href="/cek">Cek teks</a>
     </div>
     <button class="nav__toggle" type="button" aria-expanded="false" aria-label="Menu">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M2 5h14M2 13h14" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
@@ -147,7 +122,7 @@ function penutup(array $o = []): void
     <div class="closing__cta close--word">
       <div class="section-head--split">
         <div><h2 id="close-h">Cek teks sebelum diunggah</h2><p class="t-lead">Gratis, tanpa akun, hingga 2.000 karakter sekali cek.</p></div>
-        <a class="btn btn--primary" href="/#cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
+        <a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a>
       </div>
       <p class="close__word" aria-hidden="true">Cek Hatespeech</p>
     </div>
@@ -157,9 +132,8 @@ function penutup(array $o = []): void
           <a class="nav__logo" href="/"><span class="mark" data-mark="dots" aria-hidden="true"></span>Cek Hatespeech</a>
           <p class="footer__lede">Tugas akhir Teknik Informatika, Telkom University Purwokerto.</p>
         </div>
-        <div class="span-2 footer__col"><h3>Aplikasi</h3><ul><li><a href="/#cek">Cek teks</a></li><li><a href="/#cara-kerja">Cara kerja</a></li><li><a href="/#hasil">Arti hasil</a></li><li><a href="/#model">Model</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Hukum</h3><ul><li><a href="/dasar-hukum#uu-ite">UU ITE</a></li><li><a href="/dasar-hukum#kuhp">KUHP</a></li><li><a href="/dasar-hukum#ringkasan">Ringkasan pidana</a></li></ul></div>
-        <div class="span-2 footer__col"><h3>Tentang</h3><ul><li><a href="/tentang">Aplikasi</a></li><li><a href="/tentang#ujaran-kebencian">Ujaran kebencian</a></li><li><a href="/tentang#pengembang">Pengembang</a></li><li><a href="/#faq">FAQ</a></li></ul></div>
+        <div class="span-2 start-7 footer__col"><h3>Aplikasi</h3><ul><li><a href="/">Beranda</a></li><li><a href="/tentang">Tentang</a></li><li><a href="/cek">Cek teks</a></li></ul></div>
+        <div class="span-2 footer__col"><h3>Hukum</h3><ul><li><a href="/dasar-hukum">Dasar hukum</a></li><li><a href="/dasar-hukum#ringkasan">Ringkasan pidana</a></li></ul></div>
         <div class="span-2 footer__col"><h3>Sumber</h3><ul><li><a href="https://huggingface.co/nahiar/hatespeech-abusive-xlm-roberta-v1" rel="noopener">Model di Hugging Face</a></li><li><a href="https://github.com/ArvanMurbiyanto10/cek-hatespeech" rel="noopener">Kode di GitHub</a></li></ul></div>
       </div>
       <div class="footer__legal">

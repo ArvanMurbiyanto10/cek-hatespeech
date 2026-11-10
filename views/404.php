@@ -13,7 +13,7 @@ navigasi();
     <div class="wrap">
       <h1 id="h404">Halaman ini tidak ada di Cek Hatespeech</h1>
       <p>Alamatnya mungkin salah ketik atau sudah dipindah. Cek teks dari halaman utama, atau buka dasar hukum dan halaman tentang lewat menu di atas.</p>
-      <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/#cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
+      <p class="btn-row" style="margin-top: var(--s-6)"><a class="btn btn--primary" href="/cek">Cek teks<svg class="m-arrow" viewBox="0 0 12 12" aria-hidden="true"><path class="m-arrow__stem" d="M1 6h8"/><path class="m-arrow__head" d="M4.5 2.5 8 6l-3.5 3.5"/></svg></a></p>
     </div>
   </section>
 </main>
