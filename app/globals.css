@@ -1,0 +1,13 @@
+/* Palet merah putih (menimpa token kit). Dimuat setelah CSS kit dan sebelum ui/base.css. */
+:root {
+  --p-bg: #ffffff; --p-surface: #f7f3f2; --p-ink: #1d1a1a; --p-muted: #575151;
+  --p-accent: #fbe5e5; --p-accent-ink: #8c0d15; --p-action: #b0121c; --p-action-ink: #ffffff;
+  --p-inv-bg: #a8101a; --p-inv-surface: #b8202a; --p-inv-ink: #ffffff; --p-inv-muted: #f6d2d4;
+  --p-inv-accent: #ffffff; --p-inv-accent-ink: #a8101a; --p-inv-action: #ffffff; --p-inv-action-ink: #a8101a;
+  --font-display: "Host Grotesk", system-ui, sans-serif;
+  --font-text: "Host Grotesk", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --display-weight: 500;
+  --display-tracking: -0.035em;
+  --display-tracking-xl: -0.04em;
+}

@@ -20,3 +20,12 @@ __pycache__/
 # Skill Claude Code pihak ketiga (dipasang lokal) & folder kerja taste-skill
 .claude/skills/
 .taste-skill/
+
+# Next.js
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+.env*.local
+.env

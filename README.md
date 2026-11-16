@@ -1,62 +1,72 @@
 # Cek Hatespeech
 
-Aplikasi web satu halaman untuk mendeteksi **ujaran kebencian** (*hate speech*) dan **bahasa kasar** (*abusive language*) pada teks berbahasa Indonesia. Penilaiannya dilakukan oleh model Transformer [`nahiar/hatespeech-abusive-xlm-roberta-v1`](https://huggingface.co/nahiar/hatespeech-abusive-xlm-roberta-v1).
+Aplikasi web pelaporan perundungan dan ujaran kebencian untuk mahasiswa Telkom University Purwokerto.
+Bukti teks dinilai model **XLM-RoBERTa** (`nahiar/hatespeech-abusive-xlm-roberta-v1`), pasal UU ITE yang mungkin
+terkait dipilih otomatis, dan laporan disimpan di database untuk ditangani **Satgas PPKPT**.
 
-Proyek ini dibuat sebagai tugas akhir.
+## Teknologi
 
-## Fitur
+| Bagian | Teknologi |
+|---|---|
+| Aplikasi web | Next.js 15 (App Router), React 19, TypeScript |
+| Database, login, penyimpanan file | Supabase (PostgreSQL, Auth, Storage, Row Level Security) |
+| Model AI | FastAPI "RuangAman API" di Google Colab, diakses lewat Cloudflare Tunnel |
+| PDF laporan | jsPDF (dibuat di browser) |
+| Hosting | Vercel |
 
-- Cek teks hingga 2.000 karakter. Hasilnya berupa salah satu dari empat status: **Terindikasi Hate Speech**, **Perlu Ditinjau**, **Ujaran Kasar**, atau **Bukan Hate Speech**.
-- Skor probabilitas dari model untuk hate speech dan bahasa kasar.
-- Sorotan kata, perkiraan sasaran (individu/kelompok), dan kategori (agama, ras, fisik, gender) dari kamus kata bantu.
-- Halaman edukasi: pengertian ujaran kebencian, dasar hukum dan penjelasan pasal (UU ITE, KUHP baru, UU 40/2008), cara kerja sistem, informasi model, keterbatasan, dan FAQ.
+## Dua role
 
-## Arsitektur
+- **Mahasiswa**: daftar dan masuk, membuat laporan (data diri terisi dari akun), memantau status, mengunduh PDF.
+- **Satgas PPKPT**: melihat semua laporan di dasbor (urut prioritas), mengubah status, menulis catatan, melihat rekap.
 
-```
-Browser ──▶ index.php (PHP) ──JSON──▶ API FastAPI (Google Colab + Cloudflare Tunnel) ──▶ XLM-RoBERTa
-```
-
-- **api/index.php**: tampilan, validasi input, pemanggilan API model, dan kamus kata bantu.
-- **API model**: FastAPI yang berjalan di Google Colab. Kode API tidak termasuk di repository ini.
-
-## Menjalankan secara lokal
-
-Kebutuhan: PHP 8.0 atau lebih baru dengan ekstensi `curl` dan `mbstring`.
-
-1. Jalankan notebook API model di Google Colab, lalu salin URL Cloudflare Tunnel yang muncul.
-2. Atur alamat API lewat environment variable `API_URL` (URL tadi ditambah `/predict`), atau ubah nilai cadangannya di `api/index.php`.
-3. Jalankan server dari folder akar proyek:
-   ```bash
-   API_URL=https://xxxx.trycloudflare.com/predict php -S localhost:8000 -t . api/index.php
-   ```
-4. Buka http://localhost:8000.
-
-Data identitas di bagian "Pengembang" diatur lewat konstanta `PENGEMBANG` di bagian atas `api/index.php`.
-
-## Deploy ke Vercel
-
-Proyek memakai runtime komunitas [`vercel-php`](https://github.com/vercel-community/php) yang diatur di `vercel.json`.
-
-1. Import repository ini di Vercel (Add New > Project). Framework Preset: **Other**.
-2. Tambahkan Environment Variable `API_URL` berisi URL API model ditambah `/predict`.
-3. Deploy. Setiap kali `API_URL` diganti, lakukan **Redeploy** agar nilainya terpakai.
+Aturan "mahasiswa hanya melihat laporannya sendiri, Satgas melihat semua" dijaga oleh database lewat RLS
+(lihat `supabase/schema.sql`).
 
 ## Struktur
 
 ```
-.
-├── api/index.php      # Seluruh aplikasi (logika, tampilan, skrip)
-├── assets/img/        # Foto halaman (lihat BACA-SAYA.txt)
-└── vercel.json        # Konfigurasi runtime PHP di Vercel
+app/                 halaman (beranda, tentang, dasar-hukum, masuk, daftar, lapor, laporan, satgas)
+app/api/periksa      pratinjau pemeriksaan AI
+app/api/laporan      menyimpan laporan baru (AI dihitung ulang di server)
+lib/kamus.ts         kamus kata untuk menyorot kata dan memperkirakan sasaran
+lib/model.ts         pemanggilan model AI
+lib/pasal.ts         pemilihan pasal yang mungkin terkait dan prioritas laporan
+lib/pdf.ts           pembuat PDF laporan
+supabase/schema.sql  tabel, RLS, trigger profil dan bucket lampiran
+public/assets        CSS, JS dan foto
 ```
 
-## Kredit
+## Menjalankan
 
-- Model: [nahiar/hatespeech-abusive-xlm-roberta-v1](https://huggingface.co/nahiar/hatespeech-abusive-xlm-roberta-v1) (Apache-2.0)
-- Foto (CC0 / domain publik): rawpixel, Rawpixel.com via Wikimedia Commons, Siddharth Bhogra via StockSnap, Joe Gratz via Wikimedia Commons. Rincian ada di [`assets/img/BACA-SAYA.txt`](assets/img/BACA-SAYA.txt).
-- Logo Telkom University: Hilfans via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Logo_Telkom_University_potrait.png), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/).
+1. **Buat proyek Supabase** di supabase.com (paket gratis cukup).
+2. Buka **SQL Editor**, tempel isi `supabase/schema.sql`, lalu **Run**.
+3. Di **Authentication -> URL Configuration**, isi Site URL (misalnya `https://cek-hatespeech.vercel.app`) dan
+   tambahkan `http://localhost:3000/**` serta `https://cek-hatespeech.vercel.app/**` ke Redirect URLs.
+4. Salin `.env.example` menjadi `.env.local`, lalu isi dari **Project Settings -> API**:
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=...
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=...
+   API_URL=https://xxxx.trycloudflare.com/predict
+   ```
+5. Jalankan:
+   ```
+   npm install
+   npm run dev
+   ```
+   Buka http://localhost:3000.
+6. **Akun Satgas**: daftar seperti biasa, lalu jalankan di SQL Editor:
+   ```sql
+   update public.profiles set role = 'satgas' where email = 'email-satgas@contoh.ac.id';
+   ```
+
+## Deploy ke Vercel
+
+1. Di Vercel: **Settings -> General -> Framework Preset** pilih **Next.js**.
+2. **Settings -> Environment Variables**: isi tiga variabel di atas (Production, Preview, Development).
+3. Push ke `main`; Vercel membangun ulang otomatis.
 
 ## Catatan
 
-Hasil deteksi bersifat otomatis dan bisa keliru. Hasilnya bukan alat bukti hukum, dan penjelasan pasal di halaman ini adalah ringkasan untuk tujuan edukasi.
+- Kontak resmi Satgas diisi di `lib/kampus.ts` (konstanta `KAMPUS`), hanya dari kanal resmi kampus.
+- Teks pasal ada di `lib/kampus.ts` (`PASAL`) dan tabel `pasal`. Cocokkan dengan naskah resmi sebelum dipakai.
+- Aplikasi ini prototipe tugas akhir, bukan layanan resmi Telkom University Purwokerto.

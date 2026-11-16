@@ -1,0 +1,61 @@
+/* Penyesuaian bersama di atas kit. */
+footer.closing .close__word { font-size: min(12.6vw, 186px); line-height: 1.1; padding-block: .04em; white-space: nowrap; overflow: visible; }
+footer.closing > .wrap > * { min-width: 0; }
+html .hero .hero__lead { color: #4a4545 !important; }
+/* halaman dokumen dan aplikasi: tinggi mengikuti isi, tidak dikunci satu layar */
+main > section.doc-sec { height: auto; min-height: 0; }
+.doc-sec { padding: var(--padt) 0 var(--padb); }
+.doc-sec.ground-surface { background: var(--g-alt); }
+html main section:not(.ground-inverse) :is(p.muted, .t-lead) { color: #4a4545; }
+.mark[data-mark] { background: var(--p-action); }
+.ground-inverse .mark[data-mark] { background: #fff; }
+
+/* menu akun di navigasi */
+.nav__akun { display: flex; align-items: center; gap: 10px; }
+.nav__akun form { margin: 0; }
+.nav__keluar { border: 0; background: none; font: 500 15px/1 var(--font-text); color: var(--ink); cursor: pointer; padding: 8px 4px; text-decoration: underline; text-underline-offset: 4px; text-decoration-color: rgb(29 26 26 / .3); }
+@media (max-width: 899px) { .nav__akun .nav__keluar { display: none; } }
+
+/* halaman aplikasi (masuk, laporan, satgas) */
+.app-page { padding-top: calc(var(--nav) + var(--s-8)); }
+.app-page h1 { font-size: clamp(32px, 3.8vw, 52px); }
+.app-page .lead { margin-top: var(--s-4); font-size: 18px; line-height: 1.6; color: #4a4545; max-width: 60ch; }
+.kartu { background: #fff; border: 1px solid #ece6e5; border-radius: 18px; padding: 28px; }
+.f { display: grid; gap: 6px; align-content: start; }
+.f > label, .f > .f__label { font: 500 15px/1.35 var(--font-text); color: var(--ink); }
+.f > label em, .f__label em { font-style: normal; color: #a8101a; }
+.f small { font-size: 13px; color: #5c5656; line-height: 1.45; }
+.f :is(input[type=text], input[type=email], input[type=password], input[type=date], input[type=number], select, textarea) {
+  width: 100%; min-height: 48px; padding: 11px 14px; border: 1px solid #d9d1d0; border-radius: 10px; background: #fff;
+  font: 400 16px/1.45 var(--font-text); color: var(--ink); }
+.f textarea { resize: vertical; min-height: 130px; }
+.f :is(input, select, textarea):focus-visible { outline: 2px solid var(--p-action); outline-offset: 1px; border-color: var(--p-action); }
+.f .salah { border-color: #a8101a !important; background: #fff8f8 !important; }
+.pesan { margin: 14px 0 0; padding: 12px 14px; border-radius: 10px; font-size: 15px; line-height: 1.5; }
+.pesan--galat { background: #fbe9e6; color: #8f2016; }
+.pesan--info { background: #fdf2e0; color: #6e4100; }
+.pesan--ok { background: #e4f6ea; color: #17603b; }
+.btn[disabled] { opacity: .6; cursor: progress; }
+
+/* lencana status dan prioritas */
+.lencana { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 10px; border-radius: 99px; font: 500 13px/1 var(--font-text); white-space: nowrap; background: #f1ecec; color: #3d3838; }
+.lencana::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.lencana--terkirim { background: #eef1f6; color: #2e4462; }
+.lencana--diverifikasi { background: #fdf2e0; color: #7d4a00; }
+.lencana--ditindaklanjuti { background: #fbe5e5; color: #8c0d15; }
+.lencana--selesai { background: #e4f6ea; color: #17603b; }
+.lencana--ditolak { background: #ececec; color: #4a4545; }
+.lencana--tinggi { background: #a8101a; color: #fff; }
+.lencana--sedang { background: #fdf2e0; color: #7d4a00; }
+.lencana--normal { background: #f1ecec; color: #4a4545; }
+
+/* sorotan kata hasil kamus */
+.hl-hate { background: #fbe6e3; color: #8f2016; box-shadow: inset 0 -2px 0 #a3271b; }
+.hl-threat { background: #a3271b; color: #fff; }
+.hl-abuse { background: #fdf0dc; color: #6e4100; box-shadow: inset 0 -2px 0 #8a5300; }
+.hl-target { background: #e9eef5; color: #233a58; }
+mark[class^="hl-"] { padding: 1px 3px; border-radius: 4px; font-weight: 500; }
+
+/* pemberitahuan Supabase belum disiapkan */
+.belum-siap { margin-top: var(--s-6); padding: 18px 20px; border-radius: 14px; background: #fdf2e0; color: #6e4100; font-size: 15px; line-height: 1.6; }
+.belum-siap code { font-family: var(--font-mono); font-size: 13px; background: #fff; padding: 1px 6px; border-radius: 6px; }
