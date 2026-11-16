@@ -2,22 +2,22 @@ import type { StatusLaporan } from './kampus';
 
 export type Role = 'mahasiswa' | 'satgas';
 
-export interface Profil {
-  id: string;
+export interface Pengguna {
+  id: number;
   role: Role;
   nama: string;
   nim: string | null;
   prodi: string | null;
   angkatan: number | null;
   kontak: string | null;
-  email: string | null;
+  email: string;
   dibuat: string;
 }
 
 export interface Laporan {
-  id: string;
+  id: number;
   kode: string;
-  pelapor_id: string;
+  pelapor_id: number;
   peran: 'korban' | 'saksi';
   tanggal_kejadian: string;
   tempat: string;
@@ -32,8 +32,8 @@ export interface Laporan {
 }
 
 export interface Bukti {
-  id: string;
-  laporan_id: string;
+  id: number;
+  laporan_id: number;
   isi_teks: string;
   ai_label: 'hate' | 'tinjau' | 'abusive' | 'aman' | null;
   skor_hatespeech: number | null;
@@ -44,32 +44,36 @@ export interface Bukti {
 }
 
 export interface Lampiran {
-  id: string;
-  laporan_id: string;
-  path: string;
-  dibuat: string;
+  id: number;
+  laporan_id: number;
+  nama_file: string;
+  mime: string;
+  ukuran: number;
+  /** Rute yang mengecek hak akses sebelum mengirim gambar. */
+  url: string;
 }
 
 export interface LaporanPasal {
-  laporan_id: string;
+  laporan_id: number;
   pasal_kode: string;
   alasan: string;
 }
 
 export interface Riwayat {
   id: number;
-  laporan_id: string;
+  laporan_id: number;
   status: string;
   catatan: string;
-  oleh: string | null;
+  oleh: number | null;
+  oleh_nama: string | null;
   dibuat: string;
 }
 
 /** Laporan lengkap untuk halaman detail dan PDF. */
 export interface LaporanLengkap extends Laporan {
-  pelapor: Pick<Profil, 'nama' | 'nim' | 'prodi' | 'angkatan' | 'kontak' | 'email'> | null;
+  pelapor: Pick<Pengguna, 'nama' | 'nim' | 'prodi' | 'angkatan' | 'kontak' | 'email'>;
   bukti: Bukti[];
-  lampiran: (Lampiran & { url: string | null })[];
+  lampiran: Lampiran[];
   laporan_pasal: LaporanPasal[];
   riwayat_status: Riwayat[];
 }

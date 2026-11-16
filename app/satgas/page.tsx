@@ -1,17 +1,13 @@
 import { redirect } from 'next/navigation';
-import { penggunaSaatIni, supabaseServer } from '@/lib/supabase/server';
+import { penggunaSaatIni } from '@/lib/auth';
+import { semuaLaporan } from '@/lib/data';
 import { DAFTAR_STATUS, STATUS, type StatusLaporan } from '@/lib/kampus';
-import type { Laporan } from '@/lib/types';
 import '../laporan/laporan.css';
 
 export const metadata = { title: 'Dasbor Satgas' };
 
-type Baris = Pick<Laporan, 'id' | 'kode' | 'tempat' | 'bentuk' | 'status' | 'prioritas' | 'dibuat' | 'diubah'> & {
-  pelapor: { nama: string; nim: string | null } | null;
-};
-
 const URUT_PRIORITAS = { tinggi: 0, sedang: 1, normal: 2 } as const;
-const tgl = (s: string) => new Date(s).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+const tgl = (s: string) => new Date(s).toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'short', year: 'numeric' });
 
 function hitung<T extends string>(nilai: T[]): [T, number][] {
   const m = new Map<T, number>();
@@ -22,17 +18,12 @@ function hitung<T extends string>(nilai: T[]): [T, number][] {
 export default async function Halaman({ searchParams }: { searchParams: Promise<{ status?: string }> }) {
   const user = await penggunaSaatIni();
   if (!user) redirect('/masuk?lanjut=/satgas');
-  if (user.profil?.role !== 'satgas') redirect('/laporan');
+  if (user.role !== 'satgas') redirect('/laporan');
 
   const { status } = await searchParams;
   const filter = DAFTAR_STATUS.includes(status as StatusLaporan) ? (status as StatusLaporan) : null;
 
-  const sb = await supabaseServer();
-  const { data } = await sb
-    .from('laporan')
-    .select('id, kode, tempat, bentuk, status, prioritas, dibuat, diubah, pelapor:profiles(nama, nim)')
-    .order('dibuat', { ascending: false });
-  const semua = (data ?? []) as unknown as Baris[];
+  const semua = await semuaLaporan();
 
   // Laporan aktif diurutkan berdasarkan prioritas, lalu yang terbaru.
   const tampil = semua
@@ -68,7 +59,7 @@ export default async function Halaman({ searchParams }: { searchParams: Promise<
                     <tr key={l.id}>
                       <td><span className={`lencana lencana--${l.prioritas}`}>{l.prioritas}</span></td>
                       <td><a href={`/laporan/${l.kode}`}>{l.kode}</a></td>
-                      <td>{l.pelapor?.nama ?? '-'}<br /><span className="muted-sel">{l.pelapor?.nim ?? ''}</span></td>
+                      <td>{l.pelapor_nama}<br /><span className="muted-sel">{l.pelapor_nim ?? ''}</span></td>
                       <td className="muted-sel">{l.bentuk.join(', ')}</td>
                       <td className="muted-sel">{l.tempat}</td>
                       <td><span className={`lencana lencana--${l.status}`}>{STATUS[l.status].label}</span></td>

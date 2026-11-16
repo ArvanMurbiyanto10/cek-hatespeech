@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { deteksiHatespeech, GalatModel } from '@/lib/model';
 import { MAKS_KARAKTER } from '@/lib/kampus';
-import { penggunaSaatIni } from '@/lib/supabase/server';
+import { penggunaSaatIni } from '@/lib/auth';
 
 /** Pratinjau pemeriksaan bukti oleh AI di formulir laporan. Hanya untuk pengguna yang sudah masuk. */
 export async function POST(req: Request) {

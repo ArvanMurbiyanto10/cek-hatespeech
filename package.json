@@ -2,17 +2,19 @@
   "name": "cek-hatespeech",
   "version": "2.0.0",
   "private": true,
-  "description": "Aplikasi web pelaporan perundungan dan ujaran kebencian untuk mahasiswa Telkom University Purwokerto (Next.js + TypeScript + Supabase).",
+  "description": "Aplikasi web pelaporan perundungan dan ujaran kebencian untuk mahasiswa Telkom University Purwokerto (Next.js + TypeScript + MySQL).",
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
     "start": "next start",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "buat-satgas": "node scripts/buat-satgas.mjs"
   },
   "dependencies": {
-    "@supabase/ssr": "^0.12.7",
-    "@supabase/supabase-js": "^2.119.0",
+    "bcryptjs": "^3.0.3",
+    "jose": "^6.2.17",
     "jspdf": "^2.5.2",
+    "mysql2": "^3.24.6",
     "next": "^15.5.29",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",

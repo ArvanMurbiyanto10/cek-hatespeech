@@ -5,7 +5,7 @@ import type { LaporanLengkap } from './types';
 
 /**
  * Membuat PDF "Laporan Dugaan Perundungan" dari data laporan yang tersimpan.
- * Dijalankan di browser; gambar lampiran diambil lewat tautan sementara Supabase Storage.
+ * Dijalankan di browser; gambar lampiran diambil lewat /api/lampiran (dengan pengecekan hak akses).
  */
 
 const MERAH: [number, number, number] = [168, 16, 26];
@@ -26,7 +26,7 @@ function aman(s: unknown): string {
     .replace(/[‘’]/g, "'").replace(/[“”]/g, '"').replace(/[–—]/g, '-').replace(/…/g, '...')
     .replace(/[^\x09\x0A\x0D\x20-\x7E\xA0-\xFF]/g, '?');
 }
-const tglPanjang = (d: Date) => d.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+const tglPanjang = (d: Date) => d.toLocaleDateString('id-ID', { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'long', year: 'numeric' });
 const persen = (x: number) => (x * 100).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
 async function keDataUrl(url: string): Promise<{ data: string; w: number; h: number } | null> {
@@ -173,7 +173,7 @@ export async function unduhPdfLaporan(lap: LaporanLengkap): Promise<void> {
     const lebar = 82;
     let x = L, tinggiBaris = 0;
     for (const [i, l] of lap.lampiran.entries()) {
-      const g = l.url ? await keDataUrl(l.url) : null;
+      const g = await keDataUrl(l.url);
       if (i % 2 === 0) { if (i) y += tinggiBaris + 12; tinggiBaris = 0; x = L; }
       if (!g) { doc.setFontSize(9); warna(ABU); doc.text(`Gambar ${i + 1} tidak dapat dimuat.`, x, y + 5); x += lebar + 6; continue; }
       const hgt = Math.min((lebar * g.h) / g.w, 118), wid = (hgt * g.w) / g.h;

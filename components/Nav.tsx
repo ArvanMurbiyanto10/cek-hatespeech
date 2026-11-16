@@ -1,10 +1,10 @@
-import { penggunaSaatIni } from '@/lib/supabase/server';
+import { penggunaSaatIni } from '@/lib/auth';
 import { NavLinks } from './NavLinks';
 
 /** Bar navigasi tetap. Menu akun berubah sesuai role: mahasiswa atau Satgas. */
 export async function Nav() {
   const user = await penggunaSaatIni();
-  const role = user?.profil?.role;
+  const role = user?.role;
   const tambahan =
     role === 'satgas' ? { href: '/satgas', label: 'Dasbor Satgas' } : role === 'mahasiswa' ? { href: '/laporan', label: 'Laporan saya' } : undefined;
 

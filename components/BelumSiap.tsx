@@ -1,12 +1,12 @@
-import { supabaseSiap } from '@/lib/supabase/konfigurasi';
+import { dbSiap } from '@/lib/db';
 
-/** Pemberitahuan untuk pengembang bila Supabase belum dihubungkan (env belum diisi). */
+/** Pemberitahuan untuk pengembang bila database atau kunci sesi belum diatur. */
 export function BelumSiap() {
-  if (supabaseSiap) return null;
+  if (dbSiap && process.env.SESSION_SECRET) return null;
   return (
     <p className="belum-siap">
-      Database belum terhubung. Isi <code>NEXT_PUBLIC_SUPABASE_URL</code> dan <code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> di{' '}
-      <code>.env.local</code> (lokal) atau Environment Variables Vercel, lalu jalankan <code>supabase/schema.sql</code>.
+      Database belum terhubung. Isi <code>DATABASE_URL</code> dan <code>SESSION_SECRET</code> di <code>.env.local</code> (lokal) atau
+      Environment Variables Vercel, lalu jalankan <code>database/schema.sql</code> di MySQL.
     </p>
   );
 }

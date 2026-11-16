@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { supabaseBrowser } from '@/lib/supabase/browser';
 import { Panah } from '@/components/Panah';
 
 export function FormDaftar() {
@@ -18,27 +17,22 @@ export function FormDaftar() {
 
     setSibuk(true);
     setGalat('');
-    const { error } = await supabaseBrowser().auth.signUp({
-      email: String(f.get('email')).trim(),
-      password: sandi,
-      options: {
-        emailRedirectTo: `${window.location.origin}/auth/callback?lanjut=/lapor`,
-        // Disalin ke tabel profiles oleh trigger. Role selalu 'mahasiswa'.
-        data: {
-          nama: String(f.get('nama')).trim(),
-          nim,
-          prodi: String(f.get('prodi')).trim(),
-          angkatan: String(f.get('angkatan') ?? ''),
-          kontak: String(f.get('kontak')).trim(),
-        },
-      },
-    });
-    if (error) {
+    try {
+      const r = await fetch('/api/auth/daftar', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nama: f.get('nama'), nim, prodi: f.get('prodi'), angkatan: f.get('angkatan'),
+          kontak: f.get('kontak'), email: f.get('email'), sandi,
+        }),
+      });
+      const d = (await r.json()) as { ok: boolean; tujuan?: string; galat?: string };
+      if (!d.ok) throw new Error(d.galat ?? 'Pendaftaran gagal.');
+      window.location.href = d.tujuan ?? '/lapor';
+    } catch (err) {
       setSibuk(false);
-      setGalat(/registered/i.test(error.message) ? 'Email ini sudah terdaftar. Silakan masuk.' : `Pendaftaran gagal: ${error.message}`);
-      return;
+      setGalat(err instanceof Error ? err.message : 'Pendaftaran gagal.');
     }
-    window.location.href = '/masuk?daftar=cek-email';
   }
 
   return (
@@ -49,7 +43,7 @@ export function FormDaftar() {
         <div className="f"><label htmlFor="nim">NIM <em>*</em></label><input type="text" id="nim" name="nim" required inputMode="numeric" maxLength={12} placeholder="contoh: 2311102074" /></div>
         <div className="f"><label htmlFor="angkatan">Angkatan</label><input type="number" id="angkatan" name="angkatan" min={2015} max={2035} placeholder="2023" /></div>
         <div className="f penuh"><label htmlFor="prodi">Program studi <em>*</em></label><input type="text" id="prodi" name="prodi" required maxLength={80} placeholder="contoh: S1 Teknik Informatika" /></div>
-        <div className="f penuh"><label htmlFor="kontak">Nomor WhatsApp <em>*</em></label><input type="text" id="kontak" name="kontak" required maxLength={30} placeholder="Agar Satgas bisa menghubungimu" /></div>
+        <div className="f penuh"><label htmlFor="kontak">Nomor WhatsApp <em>*</em></label><input type="text" id="kontak" name="kontak" required maxLength={20} inputMode="tel" placeholder="Agar Satgas bisa menghubungimu" /></div>
         <div className="f penuh"><label htmlFor="email">Email <em>*</em></label><input type="email" id="email" name="email" required autoComplete="email" /></div>
         <div className="f"><label htmlFor="sandi">Kata sandi <em>*</em></label><input type="password" id="sandi" name="sandi" required minLength={8} autoComplete="new-password" /></div>
         <div className="f"><label htmlFor="ulang">Ulangi kata sandi <em>*</em></label><input type="password" id="ulang" name="ulang" required minLength={8} autoComplete="new-password" /></div>

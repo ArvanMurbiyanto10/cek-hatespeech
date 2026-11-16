@@ -1,8 +1,7 @@
 'use client';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { BENTUK, FREKUENSI, KAMPUS, MAKS_KARAKTER, TEMPAT } from '@/lib/kampus';
 import { pilihPasal } from '@/lib/pasal';
-import { supabaseBrowser } from '@/lib/supabase/browser';
 import { Panah } from '@/components/Panah';
 
 interface Pelapor { nama: string; nim: string; prodi: string; angkatan: number | null; kontak: string; email: string }
@@ -22,7 +21,7 @@ interface Gambar { blob: Blob; url: string; nama: string }
 const IKON: Record<HasilAI['label'], string> = { hate: '!', tinjau: '?', abusive: '!', aman: '✓' };
 const persen = (x: number) => (x * 100).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
-/** Perkecil gambar di browser (sisi terpanjang 1600 px, JPEG) sebelum diunggah ke Storage. */
+/** Perkecil gambar di browser (sisi terpanjang 1600 px, JPEG) sebelum dikirim ke server. */
 async function perkecil(file: File): Promise<Blob> {
   const bmp = await createImageBitmap(file);
   const s = Math.min(1, 1600 / Math.max(bmp.width, bmp.height));
@@ -36,8 +35,7 @@ async function perkecil(file: File): Promise<Blob> {
   return new Promise((ok, gagal) => c.toBlob((b) => (b ? ok(b) : gagal(new Error('Gagal memproses gambar'))), 'image/jpeg', 0.85));
 }
 
-export function LaporForm({ pelapor, uid }: { pelapor: Pelapor; uid: string }) {
-  const idLaporan = useRef<string>(crypto.randomUUID());
+export function LaporForm({ pelapor }: { pelapor: Pelapor }) {
   const [peran, setPeran] = useState('');
   const [tanggal, setTanggal] = useState('');
   const [frekuensi, setFrekuensi] = useState<string>(FREKUENSI[0]);
@@ -93,8 +91,12 @@ export function LaporForm({ pelapor, uid }: { pelapor: Pelapor; uid: string }) {
     for (const f of files) {
       if (gambar.length + baru.length >= 3) { alert('Maksimal 3 tangkapan layar.'); break; }
       if (!/^image\/(png|jpe?g|webp)$/.test(f.type)) { alert(`${f.name} bukan gambar PNG, JPG atau WebP.`); continue; }
-      const blob = await perkecil(f);
-      baru.push({ blob, url: URL.createObjectURL(blob), nama: f.name });
+      try {
+        const blob = await perkecil(f);
+        baru.push({ blob, url: URL.createObjectURL(blob), nama: f.name });
+      } catch {
+        alert(`${f.name} tidak bisa dibuka. Pastikan berkasnya gambar yang utuh.`);
+      }
     }
     setGambar((g) => [...g, ...baru]);
   }
@@ -123,23 +125,12 @@ export function LaporForm({ pelapor, uid }: { pelapor: Pelapor; uid: string }) {
     if (s.length) return;
     setGalatKirim('');
     try {
-      // 1. unggah tangkapan layar ke Storage (folder milik pelapor)
-      const sb = supabaseBrowser();
-      const paths: string[] = [];
-      for (const [i, g] of gambar.entries()) {
-        setMengirim(`Mengunggah tangkapan layar ${i + 1} dari ${gambar.length}…`);
-        const path = `${uid}/${idLaporan.current}/${i + 1}.jpg`;
-        const { error } = await sb.storage.from('lampiran').upload(path, g.blob, { contentType: 'image/jpeg', upsert: true });
-        if (error) throw new Error(`Tangkapan layar gagal diunggah: ${error.message}`);
-        paths.push(path);
-      }
-      // 2. kirim laporan; AI dihitung ulang di server
-      setMengirim('Menyimpan laporan dan memeriksa bukti dengan AI…');
-      const r = await fetch('/api/laporan', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: idLaporan.current, peran, tanggal, tempat, tempatLain, frekuensi, bentuk, pelaku, kronologi, bukti, lampiran: paths, setuju }),
-      });
+      // Semua data dan tangkapan layar dikirim sekaligus; server menyimpannya dalam satu transaksi MySQL.
+      setMengirim(gambar.length ? `Mengirim laporan dan ${gambar.length} tangkapan layar…` : 'Mengirim laporan…');
+      const fd = new FormData();
+      fd.append('data', JSON.stringify({ peran, tanggal, tempat, tempatLain, frekuensi, bentuk, pelaku, kronologi, bukti, setuju }));
+      gambar.forEach((g, i) => fd.append('gambar', g.blob, `tangkapan-layar-${i + 1}.jpg`));
+      const r = await fetch('/api/laporan', { method: 'POST', body: fd });
       const d = (await r.json()) as { ok: boolean; kode?: string; galat?: string };
       if (!d.ok || !d.kode) throw new Error(d.galat ?? 'Laporan gagal dikirim.');
       window.location.href = `/laporan/${d.kode}?baru=1`;

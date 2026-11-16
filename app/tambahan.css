@@ -56,6 +56,6 @@ html main section:not(.ground-inverse) :is(p.muted, .t-lead) { color: #4a4545; }
 .hl-target { background: #e9eef5; color: #233a58; }
 mark[class^="hl-"] { padding: 1px 3px; border-radius: 4px; font-weight: 500; }
 
-/* pemberitahuan Supabase belum disiapkan */
+/* pemberitahuan database belum disiapkan */
 .belum-siap { margin-top: var(--s-6); padding: 18px 20px; border-radius: 14px; background: #fdf2e0; color: #6e4100; font-size: 15px; line-height: 1.6; }
 .belum-siap code { font-family: var(--font-mono); font-size: 13px; background: #fff; padding: 1px 6px; border-radius: 6px; }

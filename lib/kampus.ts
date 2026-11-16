@@ -35,7 +35,7 @@ export interface Pasal {
   tautan: string;
 }
 
-/** Teks sama dengan halaman /dasar-hukum dan tabel `pasal` di database (supabase/schema.sql). */
+/** Teks sama dengan halaman /dasar-hukum dan tabel `pasal` di database (database/schema.sql). */
 export const PASAL: Record<KodePasal, Pasal> = {
   '28-2': {
     nama: 'UU ITE Pasal 28 ayat (2) jo. Pasal 45A ayat (2)',

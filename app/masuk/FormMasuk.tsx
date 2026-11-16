@@ -1,6 +1,5 @@
 'use client';
 import { useState } from 'react';
-import { supabaseBrowser } from '@/lib/supabase/browser';
 import { Panah } from '@/components/Panah';
 
 export function FormMasuk({ lanjut }: { lanjut: string }) {
@@ -12,15 +11,19 @@ export function FormMasuk({ lanjut }: { lanjut: string }) {
     const f = new FormData(e.currentTarget);
     setSibuk(true);
     setGalat('');
-    const sb = supabaseBrowser();
-    const { data, error } = await sb.auth.signInWithPassword({ email: String(f.get('email')), password: String(f.get('sandi')) });
-    if (error || !data.user) {
+    try {
+      const r = await fetch('/api/auth/masuk', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: f.get('email'), sandi: f.get('sandi') }),
+      });
+      const d = (await r.json()) as { ok: boolean; role?: string; galat?: string };
+      if (!d.ok) throw new Error(d.galat ?? 'Gagal masuk.');
+      window.location.href = d.role === 'satgas' ? '/satgas' : lanjut || '/laporan';
+    } catch (err) {
       setSibuk(false);
-      setGalat(error?.message === 'Email not confirmed' ? 'Email belum dikonfirmasi. Buka tautan di emailmu dulu.' : 'Email atau kata sandi salah.');
-      return;
+      setGalat(err instanceof Error ? err.message : 'Gagal masuk.');
     }
-    const { data: profil } = await sb.from('profiles').select('role').eq('id', data.user.id).maybeSingle();
-    window.location.href = profil?.role === 'satgas' ? '/satgas' : lanjut || '/laporan';
   }
 
   return (

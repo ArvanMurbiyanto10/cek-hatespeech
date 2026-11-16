@@ -1,5 +1,5 @@
 import { notFound, redirect } from 'next/navigation';
-import { penggunaSaatIni } from '@/lib/supabase/server';
+import { penggunaSaatIni } from '@/lib/auth';
 import { ambilLaporanLengkap } from '@/lib/data';
 import { deteksiKamus } from '@/lib/kamus';
 import { PASAL, STATUS, type KodePasal } from '@/lib/kampus';
@@ -13,7 +13,7 @@ const JUDUL_AI: Record<string, string> = {
   hate: 'Indikasi kuat ujaran kebencian', tinjau: 'Perlu ditinjau manusia', abusive: 'Bahasa kasar', aman: 'Tidak terindikasi',
 };
 const tgl = (s: string, jam = false) =>
-  new Date(s).toLocaleString('id-ID', { day: 'numeric', month: 'long', year: 'numeric', ...(jam ? { hour: '2-digit', minute: '2-digit' } : {}) });
+  new Date(s).toLocaleString('id-ID', { timeZone: 'Asia/Jakarta', day: 'numeric', month: 'long', year: 'numeric', ...(jam ? { hour: '2-digit', minute: '2-digit' } : {}) }) + (jam ? ' WIB' : '');
 const persen = (x: number | null) => ((x ?? 0) * 100).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
 export default async function Halaman({ params, searchParams }: { params: Promise<{ kode: string }>; searchParams: Promise<{ baru?: string }> }) {
@@ -21,9 +21,9 @@ export default async function Halaman({ params, searchParams }: { params: Promis
   const { baru } = await searchParams;
   const user = await penggunaSaatIni();
   if (!user) redirect(`/masuk?lanjut=/laporan/${kode}`);
-  const lap = await ambilLaporanLengkap(kode);
+  const lap = await ambilLaporanLengkap(kode, user);
   if (!lap) notFound();
-  const satgas = user.profil?.role === 'satgas';
+  const satgas = user.role === 'satgas';
   const p = lap.pelapor;
 
   return (
@@ -81,7 +81,7 @@ export default async function Halaman({ params, searchParams }: { params: Promis
                 {!lap.bukti.length && <p style={{ margin: 0, color: '#5c5656' }}>Tidak ada teks bukti; lihat tangkapan layar.</p>}
                 {lap.lampiran.length > 0 && (
                   <div className="galeri">
-                    {lap.lampiran.map((l, i) => l.url && (
+                    {lap.lampiran.map((l, i) => (
                       <a key={l.id} href={l.url} target="_blank" rel="noopener" aria-label={`Buka tangkapan layar ${i + 1}`}>
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={l.url} alt={`Tangkapan layar bukti ${i + 1}`} />
@@ -126,7 +126,7 @@ export default async function Halaman({ params, searchParams }: { params: Promis
                 <ol className="linimasa">
                   {lap.riwayat_status.map((r) => (
                     <li key={r.id}>
-                      <b>{STATUS[r.status as keyof typeof STATUS]?.label ?? r.status}</b>
+                      <b>{STATUS[r.status as keyof typeof STATUS]?.label ?? r.status}{satgas && r.oleh_nama ? ` · ${r.oleh_nama}` : ''}</b>
                       <time dateTime={r.dibuat}>{tgl(r.dibuat, true)}</time>
                       {r.catatan && <p>{r.catatan}</p>}
                     </li>

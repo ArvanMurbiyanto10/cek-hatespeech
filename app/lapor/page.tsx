@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
-import { penggunaSaatIni } from '@/lib/supabase/server';
+import { penggunaSaatIni } from '@/lib/auth';
 import { KAMPUS } from '@/lib/kampus';
 import { BelumSiap } from '@/components/BelumSiap';
 import { LaporForm } from './LaporForm';
@@ -19,9 +19,9 @@ export default async function Halaman() {
       </main>
     );
   }
-  if (user.profil?.role === 'satgas') redirect('/satgas');
+  if (user.role === 'satgas') redirect('/satgas');
 
-  const p = user.profil;
+  const p = user;
   return (
     <main id="top">
       <section className="doc-sec lapor" aria-labelledby="lapor-h">
@@ -42,7 +42,6 @@ export default async function Halaman() {
               kontak: p?.kontak ?? '',
               email: user.email,
             }}
-            uid={user.id}
           />
         </div>
       </section>
