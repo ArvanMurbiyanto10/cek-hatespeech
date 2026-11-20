@@ -1,4 +1,5 @@
 'use client';
+import { bacaBalasan } from '@/lib/balasan';
 import { useState } from 'react';
 import { Panah } from '@/components/Panah';
 
@@ -26,7 +27,7 @@ export function FormDaftar() {
           kontak: f.get('kontak'), email: f.get('email'), sandi,
         }),
       });
-      const d = (await r.json()) as { ok: boolean; tujuan?: string; galat?: string };
+      const d = await bacaBalasan<{ ok: boolean; tujuan?: string; galat?: string }>(r);
       if (!d.ok) throw new Error(d.galat ?? 'Pendaftaran gagal.');
       window.location.href = d.tujuan ?? '/lapor';
     } catch (err) {

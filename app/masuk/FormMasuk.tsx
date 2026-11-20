@@ -1,4 +1,5 @@
 'use client';
+import { bacaBalasan } from '@/lib/balasan';
 import { useState } from 'react';
 import { Panah } from '@/components/Panah';
 
@@ -17,7 +18,7 @@ export function FormMasuk({ lanjut }: { lanjut: string }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: f.get('email'), sandi: f.get('sandi') }),
       });
-      const d = (await r.json()) as { ok: boolean; role?: string; galat?: string };
+      const d = await bacaBalasan<{ ok: boolean; role?: string; galat?: string }>(r);
       if (!d.ok) throw new Error(d.galat ?? 'Gagal masuk.');
       window.location.href = d.role === 'satgas' ? '/satgas' : lanjut || '/laporan';
     } catch (err) {

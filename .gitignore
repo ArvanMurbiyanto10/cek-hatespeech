@@ -29,3 +29,6 @@ next-env.d.ts
 *.tsbuildinfo
 .env*.local
 .env
+
+# dokumen proposal (berisi data pribadi) tidak ikut ke repo publik
+pdfnyaa/

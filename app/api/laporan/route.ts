@@ -9,7 +9,7 @@ import { hitungPrioritas, pilihPasal } from '@/lib/pasal';
 export const maxDuration = 30;
 
 const MAKS_GAMBAR = 3;
-const MAKS_UKURAN = 1.5 * 1024 * 1024; // per gambar, setelah diperkecil di browser
+const MAKS_UKURAN = 1024 * 1024; // 1 MB per gambar setelah diperkecil di browser; 3 gambar tetap di bawah batas kiriman Vercel (~4,5 MB)
 const MIME_BOLEH = ['image/jpeg', 'image/png', 'image/webp'];
 
 function buatKode(): string {
@@ -68,7 +68,7 @@ export async function POST(req: Request) {
   const gambar: { nama: string; mime: string; data: Buffer }[] = [];
   for (const f of form.getAll('gambar').slice(0, MAKS_GAMBAR)) {
     if (!(f instanceof File)) continue;
-    if (f.size > MAKS_UKURAN) return gagal(`Gambar ${f.name} terlalu besar (maksimal 1,5 MB).`);
+    if (f.size > MAKS_UKURAN) return gagal(`Gambar ${f.name} terlalu besar (maksimal 1 MB).`);
     const data = Buffer.from(await f.arrayBuffer());
     const mime = tipeGambar(data);
     if (!mime || !MIME_BOLEH.includes(mime)) return gagal(`${f.name} bukan gambar JPG, PNG atau WebP.`);

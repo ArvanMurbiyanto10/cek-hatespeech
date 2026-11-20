@@ -1,4 +1,5 @@
 'use client';
+import { bacaBalasan } from '@/lib/balasan';
 import { useEffect, useMemo, useState } from 'react';
 import { BENTUK, FREKUENSI, KAMPUS, MAKS_KARAKTER, TEMPAT } from '@/lib/kampus';
 import { pilihPasal } from '@/lib/pasal';
@@ -21,6 +22,9 @@ interface Gambar { blob: Blob; url: string; nama: string }
 const IKON: Record<HasilAI['label'], string> = { hate: '!', tinjau: '?', abusive: '!', aman: '✓' };
 const persen = (x: number) => (x * 100).toLocaleString('id-ID', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + '%';
 
+/** Batas ukuran per gambar; sama dengan MAKS_UKURAN di app/api/laporan/route.ts. */
+const BATAS_GAMBAR = 1024 * 1024;
+
 /** Perkecil gambar di browser (sisi terpanjang 1600 px, JPEG) sebelum dikirim ke server. */
 async function perkecil(file: File): Promise<Blob> {
   const bmp = await createImageBitmap(file);
@@ -32,7 +36,13 @@ async function perkecil(file: File): Promise<Blob> {
   x.fillStyle = '#fff';
   x.fillRect(0, 0, c.width, c.height);
   x.drawImage(bmp, 0, 0, c.width, c.height);
-  return new Promise((ok, gagal) => c.toBlob((b) => (b ? ok(b) : gagal(new Error('Gagal memproses gambar'))), 'image/jpeg', 0.85));
+  const jadikan = (q: number) => new Promise<Blob>((ok, gagal) => c.toBlob((b) => (b ? ok(b) : gagal(new Error('Gagal memproses gambar'))), 'image/jpeg', q));
+  // Turunkan kualitas bila masih di atas batas server, agar 3 gambar tetap di bawah batas kiriman Vercel (~4,5 MB).
+  for (const q of [0.85, 0.7, 0.55]) {
+    const b = await jadikan(q);
+    if (b.size <= BATAS_GAMBAR) return b;
+  }
+  return jadikan(0.4);
 }
 
 export function LaporForm({ pelapor }: { pelapor: Pelapor }) {
@@ -74,7 +84,7 @@ export function LaporForm({ pelapor }: { pelapor: Pelapor }) {
     setGalatAi('');
     try {
       const r = await fetch('/api/periksa', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ teks }) });
-      const d = (await r.json()) as { ok: boolean; hasil?: HasilAI; galat?: string };
+      const d = await bacaBalasan<{ ok: boolean; hasil?: HasilAI; galat?: string }>(r);
       if (!d.ok || !d.hasil) setGalatAi(d.galat ?? 'Pemeriksaan gagal.');
       else { setAi(d.hasil); setTeksDiperiksa(teks); }
     } catch {
@@ -131,7 +141,7 @@ export function LaporForm({ pelapor }: { pelapor: Pelapor }) {
       fd.append('data', JSON.stringify({ peran, tanggal, tempat, tempatLain, frekuensi, bentuk, pelaku, kronologi, bukti, setuju }));
       gambar.forEach((g, i) => fd.append('gambar', g.blob, `tangkapan-layar-${i + 1}.jpg`));
       const r = await fetch('/api/laporan', { method: 'POST', body: fd });
-      const d = (await r.json()) as { ok: boolean; kode?: string; galat?: string };
+      const d = await bacaBalasan<{ ok: boolean; kode?: string; galat?: string }>(r);
       if (!d.ok || !d.kode) throw new Error(d.galat ?? 'Laporan gagal dikirim.');
       window.location.href = `/laporan/${d.kode}?baru=1`;
     } catch (err) {

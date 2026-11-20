@@ -13,7 +13,7 @@ export const KAMPUS = {
 } as const;
 
 export const PENGEMBANG = {
-  judul: 'Rancang Bangun Aplikasi Web Deteksi Ujaran Kebencian Berbahasa Indonesia Menggunakan Model XLM-RoBERTa',
+  judul: 'Sistem Cerdas Pelaporan dan Identifikasi Kalimat Ujaran Kebencian Berbasis Web Merujuk UU ITE',
   nama: 'Arvan Murbiyanto',
   nim: '2311102074',
   prodi: 'Teknik Informatika',
